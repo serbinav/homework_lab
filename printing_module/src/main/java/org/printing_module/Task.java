@@ -1,5 +1,6 @@
 package org.printing_module;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Task {
@@ -14,7 +15,8 @@ public class Task {
 		this.size = size;
 	}
 	public List<Ingredient> getListIngredients() {
-		return listIngredients;
+		return Collections.unmodifiableList(listIngredients);
+
 	}
 	public void setListIngredients(List<Ingredient> listIngredients) {
 		this.listIngredients = listIngredients;

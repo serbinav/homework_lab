@@ -11,11 +11,10 @@ import org.printing_module.ProductionPizza;
 import org.printing_module.Storage;
 import org.printing_module.Task;
 
-public class TEST {
+public class Test {
 
 	public static void main(String[] args) {
-		
-		
+			
 		List<Task> listTask;
 
 		Storage newStorage = new StorageInList();

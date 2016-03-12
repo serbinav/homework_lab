@@ -34,10 +34,6 @@ public class Person {
 		this.number = number;
 	}
 	
-	public void createTask() {
-	
-	}
-
 	public String getNamePerson() {
 		return namePerson;
 	}
@@ -45,5 +41,8 @@ public class Person {
 	public void setNamePerson(String namePerson) {
 		this.namePerson = namePerson;
 	}
-
+	
+	public void createTask() {
+		
+	}
 }
