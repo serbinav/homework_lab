@@ -1,25 +1,33 @@
 package org.thread_release;
 
-import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.printing_module.Kitchener;
 
 import org.printing_module.Task;
 
-class TasQueue 
+class TaskQueue 
 { 
-	private List<Task> tasks = new LinkedList<>();
-
-	public List<Task> getTasks() {
-		return Collections.unmodifiableList(tasks);
-	}
-
-	public void setTasks(List<Task> tasks) {
-		this.tasks = tasks;
-	}
+	private Lock lock = new ReentrantLock();
 	
+	private final Queue<Task> tasks = new LinkedList<>();
+
+	public Task next() {
+		lock.lock();
+		Task tmpTask = tasks.poll();
+		lock.unlock();
+		return tmpTask; 
+	}
+	        
+	public void put(Task task) {
+		lock.lock();
+		tasks.add(task);
+		lock.unlock();
+	}
+
 	public int size() {
 		return tasks.size();
 	}
@@ -28,11 +36,10 @@ class TasQueue
 public class Test {
 	public static void main(String[] args) {
 		
-		TasQueue cookQueue = new TasQueue();
+		TaskQueue cookQueue = new TaskQueue();
 		
 		Kitchener cooker = new Kitchener();
 		
 		Thread cookThread = new Thread();
-
 	}
 }
