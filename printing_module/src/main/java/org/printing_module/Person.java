@@ -2,22 +2,20 @@ package org.printing_module;
 
 import java.util.UUID;
 
-public class Person extends Thread {
+public class Person {
 	private int number;
 	private String namePerson;
 	private Pizza singlePizza;
-	private int executionTime;
 
 	public Person() {
 	}
 	
-	public Person(int number, int input){
+	public Person(int number){
 		this.number = number;	
 		this.singlePizza = new Pizza();
-		this.executionTime = input;	
 
 		UUID id = UUID.randomUUID();
-		this.namePerson = id.toString().replaceAll("-","");
+		this.setNamePerson(id.toString().replaceAll("-",""));
 	}
 	
 	public Pizza getSinglePizza() {
@@ -36,19 +34,16 @@ public class Person extends Thread {
 		this.number = number;
 	}
 	
-	@Override
-	public void run()
-	{
-		try{
-			sleep(executionTime);		//Приостанавливает поток на ***
-			}catch(InterruptedException e){
-				System.out.println("яйцо!");		
-			}
-		System.out.println(number + " " + namePerson + " !");	
-	}
-	
 	public void createTask() {
 	
+	}
+
+	public String getNamePerson() {
+		return namePerson;
+	}
+
+	public void setNamePerson(String namePerson) {
+		this.namePerson = namePerson;
 	}
 
 }

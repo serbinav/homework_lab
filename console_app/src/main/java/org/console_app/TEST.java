@@ -15,6 +15,7 @@ public class TEST {
 
 	public static void main(String[] args) {
 		
+		
 		List<Task> listTask;
 
 		Storage newStorage = new StorageInList();
@@ -25,22 +26,19 @@ public class TEST {
 		listComponent.add(new Ingredient("перец", 100));
 		newStorage.setListComponent(listComponent);
 		
-        int nThreads = 5;		
-        for (int i=0; i<nThreads; i++) {
-        	Person tmpPerson = new Person(i,1000);
-        	tmpPerson.start();
-        	
-			ProductionPizza once = new StorageInCollectionThread();
-			int sizePizza = once.selectPizzaSize();
-			while (sizePizza <= 0 || sizePizza > 4100) {
-				sizePizza = once.selectPizzaSize();
-			}
-			
-			tmpPerson.getSinglePizza().setSizePizza(sizePizza);
-	
-			tmpPerson.getSinglePizza().setListIngredients(once.chooseIngredientForPizza(newStorage));
-	
-			once.printOrderPizza(tmpPerson.getSinglePizza());
-        }		
+    	Person tmpPerson = new Person();
+    	
+		ProductionPizza once = new StorageInCollectionThread();
+		int sizePizza = once.selectPizzaSize();
+		while (sizePizza <= 0 || sizePizza > 4100) {
+			sizePizza = once.selectPizzaSize();
+		}
+		
+		tmpPerson.getSinglePizza().setSizePizza(sizePizza);
+
+		tmpPerson.getSinglePizza().setListIngredients(once.chooseIngredientForPizza(newStorage));
+
+		once.printOrderPizza(tmpPerson.getSinglePizza());
+       	
 	}
 }
