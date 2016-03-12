@@ -52,7 +52,7 @@ public class StorageInCollection implements ProductionPizza {
 				if (ingrName.compareTo("?") == 0 || ingrName.compareTo("help") == 0) {
 					printHelp();
 				} else if (ingrName.compareTo("стоп") != 0) {
-					System.err.println("Вы ввели ингредиент которого нет на сладе, повторите ввод еще раз ");
+					System.err.println("Вы ввели ингредиент которого нет на складе, повторите ввод еще раз ");
 				} else {
 					return component;
 				}
@@ -86,8 +86,9 @@ public class StorageInCollection implements ProductionPizza {
 						} else {
 							component.get(j).setNumber(component.get(j).getNumber() + ingrNumber);
 							int n = hangar.getIndexByName(ingrName);
-							hangar.getListComponent().get(n).setNumber(hangar.getCountByName(ingrName) - ingrNumber);
-
+							List<Ingredient> tempList = hangar.getListComponent();
+							tempList.get(n).setNumber(hangar.getCountByName(ingrName) - ingrNumber);
+							hangar.setListComponent(tempList);
 							if (component.get(j).getNumber() == 0) {
 								component.remove(j);
 							}
@@ -104,9 +105,9 @@ public class StorageInCollection implements ProductionPizza {
 				}
 			} else {
 				int numberElem = hangar.getIndexByName(ingrName);
-
-				hangar.getListComponent().get(numberElem).setNumber(ingrNumberStorage - ingrNumber);
-
+				List<Ingredient> tempList = hangar.getListComponent();
+				tempList.get(numberElem).setNumber(ingrNumberStorage - ingrNumber);
+				hangar.setListComponent(tempList);
 				boolean flagAdd = false;
 				for (int i = 0; i < component.size(); i++) {
 					if (component.get(i).getName().compareTo(ingrName) == 0) {

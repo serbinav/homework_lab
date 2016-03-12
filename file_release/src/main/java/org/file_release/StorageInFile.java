@@ -22,7 +22,7 @@ public class StorageInFile implements Storage, Serializable{
 	private static final String MY_CONST_PATH = "serializedStorage";//C:\\WORK\\***.serial
 	private File targetFile;
 
-	public StorageInFile() { //List<Ingredient> inputList
+	public StorageInFile() {
 		this.targetFile = new File(MY_CONST_PATH);
 		this.listComponent = new ArrayList<>();
 
@@ -30,7 +30,6 @@ public class StorageInFile implements Storage, Serializable{
 			System.err.println(
 					"файл, в котором хранятся ингридиенты находящиеся на складе не найден, попытаемся его создать");
 			createNewStorageFile();
-			//this.listComponent = inputList;
 		} else {
 			System.out.println("файл, в котором хранятся ингридиенты находящиеся на складе найден!");
 			try(ObjectInputStream input = new ObjectInputStream(new FileInputStream(targetFile))){
@@ -38,7 +37,6 @@ public class StorageInFile implements Storage, Serializable{
 					targetFile.delete();
 
 					createNewStorageFile();
-					//this.listComponent = inputList;
 				}	
 				else{
 					System.out.println("на складе хранятся:");
@@ -52,7 +50,6 @@ public class StorageInFile implements Storage, Serializable{
 				targetFile.delete();
 
 				createNewStorageFile();
-				//this.listComponent = inputList;
 			}
 		}
 	}
@@ -64,8 +61,9 @@ public class StorageInFile implements Storage, Serializable{
 
 	@Override
 	public void setListComponent(List<Ingredient> listComponent) {
-		this.listComponent = listComponent;
-		//!!!
+		if(this.listComponent.size() == 0){
+			this.listComponent = listComponent;	
+		}
 		save();
 	}
 
@@ -104,6 +102,7 @@ public class StorageInFile implements Storage, Serializable{
 	
 	// сохранение данных
 	public int save() {
+		System.out.println("cохранение данных");
 		if (!targetFile.exists()) {
 			System.err.println("файл, в котором хранятся ингридиенты находящиеся на складе не найден, попытаемся его создать");
 			return createNewStorageFile();

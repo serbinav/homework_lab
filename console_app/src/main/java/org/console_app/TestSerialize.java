@@ -29,12 +29,6 @@ public class TestSerialize {
 
 		newPizza.setListIngredients(once.chooseIngredientForPizza(newStorage));
 						
-		//ObjectInputStream input = null;
-		//finally {
-		//	save();
-		//    System.err.println("ошибка данные сохранены ");
-		//}
-		
 		once.printOrderPizza(newPizza);
 	}
 }
