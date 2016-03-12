@@ -46,4 +46,9 @@ public class Person extends Thread {
 			}
 		System.out.println(number + " " + namePerson + " !");	
 	}
+	
+	public void createTask() {
+	
+	}
+
 }

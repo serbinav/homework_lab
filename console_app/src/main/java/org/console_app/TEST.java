@@ -9,11 +9,14 @@ import org.printing_module.Ingredient;
 import org.printing_module.Person;
 import org.printing_module.ProductionPizza;
 import org.printing_module.Storage;
+import org.printing_module.Task;
 
 public class TEST {
 
 	public static void main(String[] args) {
 		
+		List<Task> listTask;
+
 		Storage newStorage = new StorageInList();
 		List<Ingredient> listComponent = new ArrayList<>();
 
