@@ -1,14 +1,22 @@
 package org.printing_module;
 
+import java.util.List;
+
 public class Task {
 	
-	private Pizza singlePizza;
-
-	public Pizza getSinglePizza() {
-		return singlePizza;
+	private int size;
+	private List<Ingredient> listIngredients;
+	
+	public int getSize() {
+		return size;
 	}
-
-	public void setSinglePizza(Pizza singlePizza) {
-		this.singlePizza = singlePizza;
+	public void setSize(int size) {
+		this.size = size;
+	}
+	public List<Ingredient> getListIngredients() {
+		return listIngredients;
+	}
+	public void setListIngredients(List<Ingredient> listIngredients) {
+		this.listIngredients = listIngredients;
 	}
 }
