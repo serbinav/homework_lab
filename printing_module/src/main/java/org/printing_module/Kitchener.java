@@ -2,7 +2,7 @@ package org.printing_module;
 
 public class Kitchener {
 	
-	public Pizza cook() {
+	public Task cook() {
 		return null;
 		
 	}

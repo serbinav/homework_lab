@@ -31,6 +31,10 @@ class TaskQueue
 	public int size() {
 		return tasks.size();
 	}
+	
+	public boolean isVoid() {
+		return tasks.isEmpty();
+	}
 }
 
 public class TestThread {
@@ -39,9 +43,12 @@ public class TestThread {
 		TaskQueue cookQueue = new TaskQueue();
 		
 		Kitchener cooker = new Kitchener();
-		
+
 		Person client = new Person();
-		Thread cookThread = new Thread();
+		
+		Runnable KitchenerRunnable = new KitchenerRunnable(cookQueue);
+		
+		Thread cookThread = new Thread(KitchenerRunnable);
 		cookThread.start();
 		
 	}
