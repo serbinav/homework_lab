@@ -6,7 +6,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.printing_module.Kitchener;
-
+import org.printing_module.Person;
 import org.printing_module.Task;
 
 class TaskQueue 
@@ -33,13 +33,16 @@ class TaskQueue
 	}
 }
 
-public class Test {
+public class TestThread {
 	public static void main(String[] args) {
 		
 		TaskQueue cookQueue = new TaskQueue();
 		
 		Kitchener cooker = new Kitchener();
 		
+		Person client = new Person();
 		Thread cookThread = new Thread();
+		cookThread.start();
+		
 	}
 }

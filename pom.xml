@@ -20,6 +20,7 @@
     <module>file_release</module>
     <module>console_app</module>
     <module>thread_release</module>
+    <module>jdbc_release</module>
   </modules>
   
   <build>

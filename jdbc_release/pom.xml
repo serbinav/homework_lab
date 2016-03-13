@@ -12,11 +12,11 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   
-  <artifactId>thread_release</artifactId>
+  <artifactId>jdbc_release</artifactId>
   <version>0.0.1</version>
   <packaging>jar</packaging>
- 
-  <build>
+  
+    <build>
         <plugins>
 			<plugin>
 			  <artifactId>maven-assembly-plugin</artifactId>
@@ -50,6 +50,11 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+   <dependency>
+    	<groupId>org.postgresql</groupId>
+   		<artifactId>postgresql</artifactId>
+    	<version>9.4.1208.jre7</version>
+    </dependency>
     <dependency>
     	<groupId>com.simbirsoft.java.serbin</groupId>
     	<artifactId>printing_module</artifactId>
@@ -65,6 +70,6 @@
     	<artifactId>file_release</artifactId>
     	<version>0.0.1</version>
     </dependency>
-   </dependencies>
+  </dependencies>
   
 </project>

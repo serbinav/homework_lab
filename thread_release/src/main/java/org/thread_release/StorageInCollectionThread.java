@@ -1,4 +1,4 @@
-package org.console_release;
+package org.thread_release;
 
 import java.util.ArrayList;
 import java.util.List;
