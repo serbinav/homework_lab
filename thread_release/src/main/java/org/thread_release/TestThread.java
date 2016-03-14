@@ -55,9 +55,9 @@ public class TestThread {
 		newStorage.setListComponent(listComponent);
 		
 		TaskQueue cookQueue = new TaskQueue();
-		Kitchener cooker = new Kitchener();
-		Person client = new Person();
 		Runnable KitchenerRunnable = new KitchenerRunnable(cookQueue,newStorage);
+		Runnable PersonRunnable = new PersonRunnable(cookQueue);
+
 		Thread cookThread = new Thread(KitchenerRunnable);
 		cookThread.start();
 	}
