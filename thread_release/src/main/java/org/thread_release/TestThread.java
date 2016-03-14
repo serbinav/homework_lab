@@ -49,9 +49,9 @@ public class TestThread {
 		Storage newStorage = new StorageInList();
 		List<Ingredient> listComponent = new ArrayList<>();
 
-		listComponent.add(new Ingredient("сыр", 100));
-		listComponent.add(new Ingredient("колбаса", 100));
-		listComponent.add(new Ingredient("перец", 100));
+		listComponent.add(new Ingredient("СЃС‹СЂ", 100));
+		listComponent.add(new Ingredient("РєРѕР»Р±Р°СЃР°", 100));
+		listComponent.add(new Ingredient("РїРµСЂРµС†", 100));
 		newStorage.setListComponent(listComponent);
 		
 		TaskQueue cookQueue = new TaskQueue();
