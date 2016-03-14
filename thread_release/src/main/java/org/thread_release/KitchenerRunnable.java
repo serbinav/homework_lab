@@ -7,8 +7,8 @@ public class KitchenerRunnable implements Runnable{
 	TaskQueue cookQueue;
 	Kitchener cooker;
 
-	public KitchenerRunnable(Kitchener cooker, TaskQueue cookQueue) {
-		this.cooker = cooker;
+	public KitchenerRunnable(TaskQueue cookQueue) {
+		this.cooker = new Kitchener();
 		this.cookQueue = cookQueue;
 	}
 
