@@ -9,9 +9,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.console_release.StorageInList;
 import org.printing_module.Ingredient;
-import org.printing_module.Kitchener;
-import org.printing_module.Person;
-import org.printing_module.Pizza;
 import org.printing_module.Storage;
 import org.printing_module.Task;
 
@@ -58,9 +55,11 @@ public class TestThread {
 		Runnable KitchenerRunnable = new KitchenerRunnable(cookQueue,newStorage);
 		Runnable PersonRunnable = new PersonRunnable(cookQueue);
 
-		Thread clientThread = new Thread(PersonRunnable);
-		clientThread.start();
-		
+		for (int c = 0; c < 5; c++) {
+			Thread clientThread = new Thread(PersonRunnable);
+			clientThread.start();
+		}
+
 		Thread cookThread = new Thread(KitchenerRunnable);
 		cookThread.start();
 	}

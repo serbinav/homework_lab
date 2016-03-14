@@ -17,9 +17,13 @@ public class KitchenerRunnable implements Runnable{
 	}
 
 	@Override
-	public void run() {
-		while (!cookQueue.isVoid()) {
-	            this.cooker.cook(cookQueue.next(),this.newStorage);   
-	    }
+	public void run() {	
+		for (int k = 0; k < 5; k++) {
+			if (!cookQueue.isVoid()) {
+				this.cooker.cook(cookQueue.next(),this.newStorage);   
+	    	}
+			else
+				break;
+		}
 	}
 }
