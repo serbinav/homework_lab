@@ -2,79 +2,48 @@ package org.jdbc_release;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
+
+import org.postgresql.ds.PGPoolingDataSource;
 
 public class TestJdbc {
 
-	private static final String DB_DRIVER = "postgresql.Driver";
-	private static final String DB_CONNECTION = "jdbc:postgresql://127.0.0.1/test";
+	//private static final String DB_SERVER_NAME = "jdbc:postgresql://127.0.0.1";
+	private static final String DB_SERVER_NAME = "localhost";
+	private static final int    DB_PORT = 5432;
+	private static final String DB_NAME = "test";
 	private static final String DB_USER = "postgres";
 	private static final String DB_PASSWORD = "12345678";
 	
-	private static Connection getDBConnection() {
-	    Connection dbConnection = null;
-	    try {
-	        Class.forName(DB_DRIVER);
-	    } catch (ClassNotFoundException e) {
-	        System.out.println(e.getMessage());
-	    }
-	    try {
-	        dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER,DB_PASSWORD);
-	        return dbConnection;
-	    } catch (SQLException e) {
-	        System.out.println(e.getMessage());
-	    }
-	    return dbConnection;
-	}	
-	
-	private static void createDbUserTable() throws SQLException {
-	    Connection dbConnection = null;
-	    Statement statement = null;
-	 
-	    String createTableSQL = "CREATE TABLE DBUSER("
-	            + "id integer NOT NULL, "
-	            + "name character varying(200), "
-	            + "number_ingr integer "
-	            + ")";
-
-	    try {
-	        dbConnection = getDBConnection();
-	        statement = dbConnection.createStatement();
-	 
-	                // выполнить SQL запрос
-	        statement.execute(createTableSQL);
-	        System.out.println("Table \"dbuser\" is created!");
-	    } catch (SQLException e) {
-	        System.out.println(e.getMessage());
-	    } finally {
-	        if (statement != null) {
-	            statement.close();
-	        }
-	        if (dbConnection != null) {
-	            dbConnection.close();
-	        }
-	    }
-	}
-	
 	public static void main(String[] args) {
 		
-        Connection connection = null;
+		PGPoolingDataSource ds = new PGPoolingDataSource(); 
+		ds.setServerName(DB_SERVER_NAME); 
+		ds.setPortNumber(DB_PORT);
+		ds.setDatabaseName(DB_NAME); 
+		ds.setUser(DB_USER); 
+		ds.setPassword(DB_PASSWORD); 
+		ds.setMaxConnections(100); 
+		ds.setInitialConnections(20); 
+		
+        /*Connection connection = null;
         //URL к базе состоит из протокола:подпротокола://[хоста]:[порта_СУБД]/[БД] и других_сведений
-        String url = "jdbc:postgresql://127.0.0.1:5432/test";
+        String url = DB_SERVER_NAME+"/"+DB_NAME;
         //Имя пользователя БД
-        String name = "postgres";
+        String name = DB_USER;
         //Пароль
-        String password = "12345678";
-        try {
+        String password = DB_PASSWORD;*/
+        //try {
             //Загружаем драйвер
             //Class.forName("org.postgresql.Driver");
             //System.out.println("Драйвер подключен");
             //Создаём соединение
-            connection = DriverManager.getConnection(url, name, password);
+		
+        try (Connection connection = ds.getConnection()){
+       
+            //connection = DriverManager.getConnection(url, name, password);
             System.out.println("Соединение установлено");
             //Для использования SQL запросов существуют 3 типа объектов:
             //1.Statement: используется для простых случаев без параметров
@@ -152,7 +121,7 @@ public class TestJdbc {
             //выводим наиболее значимые сообщения
             System.err.println(ex);
             //Logger.getLogger(JDBCtest.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
+        } /*finally {
             if (connection != null) {
                 try {
                     connection.close();
@@ -161,7 +130,7 @@ public class TestJdbc {
                     //Logger.getLogger(JDBCtest.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        }
+        }*/
 
     }
 
