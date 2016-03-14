@@ -58,6 +58,9 @@ public class TestThread {
 		Runnable KitchenerRunnable = new KitchenerRunnable(cookQueue,newStorage);
 		Runnable PersonRunnable = new PersonRunnable(cookQueue);
 
+		Thread clientThread = new Thread(PersonRunnable);
+		clientThread.start();
+		
 		Thread cookThread = new Thread(KitchenerRunnable);
 		cookThread.start();
 	}
