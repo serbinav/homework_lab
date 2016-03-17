@@ -16,5 +16,4 @@ public class PersonRunnable implements Runnable{
 		this.cookQueue.put(this.client.createTask());
 
 	}
-
 }
