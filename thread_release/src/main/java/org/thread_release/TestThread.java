@@ -37,13 +37,6 @@ class TaskQueue
 		lock.unlock();
 		return format;
 	}
-	
-	public boolean isVoid() {
-		lock.lock();
-		boolean check = tasks.isEmpty();
-		lock.unlock();
-		return check;
-	}
 }
 
 public class TestThread {
