@@ -32,11 +32,17 @@ class TaskQueue
 	}
 
 	public int size() {
-		return tasks.size();
+		lock.lock();
+		int format = tasks.size();
+		lock.unlock();
+		return format;
 	}
 	
 	public boolean isVoid() {
-		return tasks.isEmpty();
+		lock.lock();
+		boolean check = tasks.isEmpty();
+		lock.unlock();
+		return check;
 	}
 }
 

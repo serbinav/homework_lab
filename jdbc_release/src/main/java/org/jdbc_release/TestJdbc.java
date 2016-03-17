@@ -28,6 +28,15 @@ public class TestJdbc {
 		ds.setMaxConnections(100); 
 		ds.setInitialConnections(20); 
 		
+//		SELECT name, number_ingr FROM storage,ingredient_dict 
+//		where storage.id_ingr = ingredient_dict.id;
+		
+//		INSERT INTO pizza(size, id_ingr, number_ingr) VALUES (7, 3, 50);
+		
+//		INSERT INTO storage(id_ingr, number_ingr) VALUES (3, 100);
+
+
+
         /*Connection connection = null;
         //URL к базе состоит из протокола:подпротокола://[хоста]:[порта_СУБД]/[БД] и других_сведений
         String url = DB_SERVER_NAME+"/"+DB_NAME;
