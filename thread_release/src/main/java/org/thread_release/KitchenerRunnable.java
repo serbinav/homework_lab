@@ -8,7 +8,7 @@ public class KitchenerRunnable implements Runnable{
 	TaskQueue cookQueue;
 	Kitchener cooker;
 	Storage newStorage;
-
+	
 	public KitchenerRunnable(TaskQueue cookQueue, Storage newStorage) {
 		this.cooker = new Kitchener();
 		
@@ -17,13 +17,16 @@ public class KitchenerRunnable implements Runnable{
 	}
 
 	@Override
-	public void run() {	
+	public void run() {
 		for (int k = 0; k < 5; k++) {
-			if (!cookQueue.isVoid()) {
-				this.cooker.cook(cookQueue.next(),this.newStorage);   
-	    	}
-			else
-				break;
+			while (cookQueue.next() == null) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					System.err.println("Ошибка: " + e);
+				}
+			}
+			this.cooker.cook(cookQueue.next(), this.newStorage);
 		}
 	}
 }
