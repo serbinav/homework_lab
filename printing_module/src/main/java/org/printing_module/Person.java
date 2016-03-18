@@ -8,29 +8,21 @@ import java.util.UUID;
 public class Person {
 	private int number;
 	private String namePerson;
-	private Pizza singlePizza;
 	private static Random randomIn;
 
 	public Person() {
 		randomIn = new Random();
+		
+		UUID id = UUID.randomUUID();
+		this.setNamePerson(id.toString().replaceAll("-",""));
 	}
 
 	public Person(int number){
 		randomIn = new Random();
-
 		this.number = number;	
-		this.singlePizza = new Pizza();
 
 		UUID id = UUID.randomUUID();
 		this.setNamePerson(id.toString().replaceAll("-",""));
-	}
-	
-	public Pizza getSinglePizza() {
-		return singlePizza;
-	}
-
-	public void setSinglePizza(Pizza singlePizza) {
-		this.singlePizza = singlePizza;
 	}
 		
 	public int getNumber() {
@@ -56,12 +48,10 @@ public class Person {
 		newPizza.setSize(randomInt());
 
 		List<Ingredient> component = new ArrayList<>();
-		
-		for (int r = 0; r < 3; ++r){
-			String ingrName = randomIngredient();
-			int ingrNumber = randomInt();
-			component.add(new Ingredient(ingrName, ingrNumber));
-		}
+				
+		component.add(new Ingredient("сыр", randomInt()));
+		component.add(new Ingredient("колбаса", randomInt()));
+		component.add(new Ingredient("перец", randomInt()));
 		
 		newPizza.setListIngredients(component);
 		
@@ -72,7 +62,6 @@ public class Person {
 	public int randomInt() {
 		int number = 0;
 		number = randomIn.nextInt(10);
-		System.out.println(number);
 		return number;
 	}
 	
@@ -81,13 +70,10 @@ public class Person {
 		number = randomIn.nextInt(3)+1;
 	
 		if (number == 1) {
-			System.out.println("сыр");
 			return "сыр";
 		} else if (number == 2) {
-			System.out.println("колбаса");
 			return "колбаса";
 		} else{
-			System.out.println("перец");
 			return "перец";	
 		}
 	}

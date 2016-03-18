@@ -4,11 +4,15 @@ import org.printing_module.Person;
 
 public class PersonRunnable implements Runnable{
 	
-	TaskQueue cookQueue;
-	Person client;
-	
+	private TaskQueue cookQueue;
+	private Person client;
+
 	public PersonRunnable(TaskQueue cookQueue) {
-			this.client = new Person();
+		this.client = new Person();
+	}
+	
+	public PersonRunnable(TaskQueue cookQueue, int num) {
+			this.client = new Person(num);
 	}
 	
 	@Override
