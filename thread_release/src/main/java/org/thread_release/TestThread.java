@@ -21,9 +21,9 @@ public class TestThread {
 		
 		TaskQueue cookQueue = new TaskQueue();
 		Runnable KitchenerRunnable = new KitchenerRunnable(cookQueue,newStorage,cookTime);
-		Runnable PersonRunnable = new PersonRunnable(cookQueue);
 
 		for (int c = 0; c < 5; c++) {
+			Runnable PersonRunnable = new PersonRunnable(cookQueue);
 			Thread clientThread = new Thread(PersonRunnable);
 			clientThread.start();
 		}

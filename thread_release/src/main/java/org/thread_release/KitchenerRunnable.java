@@ -20,6 +20,35 @@ public class KitchenerRunnable implements Runnable{
 		this.newStorage = newStorage;
 		this.cookTime = cookTime;
 	}
+	
+	public boolean CheckStockIngredients(Task next) {
+		boolean flagError = false;
+		for (int q = 0; q < next.getListIngredients().size(); q++) {
+			String ingrName = next.getListIngredients().get(q).getName();
+			int ingrNumber = next.getListIngredients().get(q).getNumber();
+			
+			int ingrNumberStorage = this.newStorage.getCountByName(ingrName);
+			
+			if (ingrNumberStorage < ingrNumber) {
+				System.err.println("Ошибка: недостатоно ингридиентов для обработки заказа");
+				flagError = true;
+				break;
+			}
+		}
+		return flagError;
+	}
+	
+	public void MinusIngredients(Task next) {
+		for (int q = 0; q < next.getListIngredients().size(); q++) {
+			String ingrName = next.getListIngredients().get(q).getName();
+			int ingrNumber = next.getListIngredients().get(q).getNumber();
+			
+			int n = this.newStorage.getIndexByName(ingrName);
+			List<Ingredient> tempList = this.newStorage.getListComponent();
+			tempList.get(n).setNumber(this.newStorage.getCountByName(ingrName) - ingrNumber);
+			this.newStorage.setListComponent(tempList);
+		}
+	}
 
 	@Override
 	public void run() {
@@ -38,30 +67,9 @@ public class KitchenerRunnable implements Runnable{
 				next = cookQueue.next();
 			}
 			
-			boolean flagError = false;
-			for (int q = 0; q < next.getListIngredients().size(); q++) {
-				String ingrName = next.getListIngredients().get(q).getName();
-				int ingrNumber = next.getListIngredients().get(q).getNumber();
+			if (this.CheckStockIngredients(next) == false) {
+					this.MinusIngredients(next);
 				
-				int ingrNumberStorage = this.newStorage.getCountByName(ingrName);
-				
-				if (ingrNumberStorage < ingrNumber) {
-					System.err.println("Ошибка: недостатоно ингридиентов для обработки заказа");
-					flagError = true;
-					break;
-				}
-			}
-
-			if (flagError == false) {
-				for (int q = 0; q < next.getListIngredients().size(); q++) {
-					String ingrName = next.getListIngredients().get(q).getName();
-					int ingrNumber = next.getListIngredients().get(q).getNumber();
-					
-					int n = this.newStorage.getIndexByName(ingrName);
-					List<Ingredient> tempList = this.newStorage.getListComponent();
-					tempList.get(n).setNumber(this.newStorage.getCountByName(ingrName) - ingrNumber);
-					this.newStorage.setListComponent(tempList);
-				}
 				try {
 					Thread.sleep(this.cookTime);
 				} catch (InterruptedException e) {
@@ -74,5 +82,6 @@ public class KitchenerRunnable implements Runnable{
 
 			this.cooker.cook(next, this.newStorage);
 		}
+		
 	}
 }
