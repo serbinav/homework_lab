@@ -32,8 +32,8 @@ public class Task {
 	
 	public String printTask() {
 		StringBuilder output = new StringBuilder();
-		output.append("Вы заказали пиццу размером: " + this.size);
-		output.append(" Состаящую из: ");
+		output.append("Пицца размером: " + this.size);
+		output.append(" Состаящая из: ");
 		for (Ingredient ingredient : listIngredients) {
 			output.append(ingredient.getName());
 			output.append(" ");

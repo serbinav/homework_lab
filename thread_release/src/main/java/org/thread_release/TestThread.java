@@ -8,7 +8,7 @@ import org.printing_module.Ingredient;
 import org.printing_module.Storage;
 
 public class TestThread {
-	private static final int cookTime = 1000;
+	private static final int cookTime = 10000;
 
 	public static void main(String[] args) {
 		Storage newStorage = new StorageInList();
@@ -23,7 +23,7 @@ public class TestThread {
 		Runnable KitchenerRunnable = new KitchenerRunnable(cookQueue,newStorage,cookTime);
 
 		for (int c = 0; c < 5; c++) {
-			Runnable PersonRunnable = new PersonRunnable(cookQueue);
+			Runnable PersonRunnable = new PersonRunnable(cookQueue,c+1);
 			Thread clientThread = new Thread(PersonRunnable);
 			clientThread.start();
 		}

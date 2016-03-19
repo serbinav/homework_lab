@@ -3,24 +3,16 @@ package org.printing_module;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 public class Person {
 	private int number;
 	private String namePerson;
 	private static Random randomIn;
 
-	public Person() {
-		randomIn = new Random();
-		this.namePerson = this.randomName();
-	}
-
 	public Person(int number){
 		randomIn = new Random();
 		this.number = number;	
-
-		UUID id = UUID.randomUUID();
-		this.namePerson = id.toString().replaceAll("-","");
+		this.namePerson = this.randomName();
 	}
 		
 	public int getNumber() {
@@ -43,7 +35,7 @@ public class Person {
 		
 		Task newPizza = new Task();
 		
-		newPizza.setSize(randomInt(10));
+		newPizza.setSize(randomInt(10)+1);
 
 		List<Ingredient> component = new ArrayList<>();
 				

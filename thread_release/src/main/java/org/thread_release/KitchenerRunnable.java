@@ -53,9 +53,7 @@ public class KitchenerRunnable implements Runnable{
 	@Override
 	public void run() {
 		for (int k = 0; k < 5; k++) {
-			
-			System.out.println("cookQueue.size()" + cookQueue.size());
-		
+					
 			Task next = cookQueue.next();
 
 			while (next == null) {
@@ -69,15 +67,20 @@ public class KitchenerRunnable implements Runnable{
 			
 			if (this.CheckStockIngredients(next) == false) {
 					this.MinusIngredients(next);
+					
+					System.out.println("Порядковый номер заказа " + next.getClient().getNumber());
+					System.out.println(next.printTask());
+					System.out.println("Поступил от " + next.getClient().getNamePerson());
+					System.out.println("Состояние очереди заказов " + cookQueue.size());
+					System.out.println(newStorage.printListComponent());
 				
 				try {
 					Thread.sleep(this.cookTime);
 				} catch (InterruptedException e) {
 					System.err.println("Ошибка sleep: " + e);
 				}
-				System.out.println(cookQueue.size());
-				System.out.println(next.printTask());
-				System.out.println(next.getClient().getNamePerson());
+				System.out.println("Заказ готов");
+				System.out.println("--------------------------------------------------------");
 			}
 
 			this.cooker.cook(next, this.newStorage);

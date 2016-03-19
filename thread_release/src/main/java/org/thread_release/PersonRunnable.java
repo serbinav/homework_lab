@@ -7,11 +7,6 @@ public class PersonRunnable implements Runnable{
 	
 	private TaskQueue cookQueue;
 	private Person client;
-
-	public PersonRunnable(TaskQueue cookQueue) {
-		this.client = new Person();
-		this.cookQueue = cookQueue;
-	}
 	
 	public PersonRunnable(TaskQueue cookQueue, int num) {
 		this.client = new Person(num);
