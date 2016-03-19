@@ -9,10 +9,12 @@ public class PersonRunnable implements Runnable{
 
 	public PersonRunnable(TaskQueue cookQueue) {
 		this.client = new Person();
+		this.cookQueue = cookQueue;
 	}
 	
 	public PersonRunnable(TaskQueue cookQueue, int num) {
-			this.client = new Person(num);
+		this.client = new Person(num);
+		this.cookQueue = cookQueue;
 	}
 	
 	@Override
