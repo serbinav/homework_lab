@@ -16,13 +16,12 @@ public class TaskQueue
 	public Task next() {
 		Task tmpTask;
 		lock.lock();
-	    try{
+		try {
 			tmpTask = tasks.poll();
-	    }
-	    finally{
+		} finally {
 			lock.unlock();
-	    }
-		return tmpTask; 
+		}
+		return tmpTask;
 	}
 	        
 	public void put(Task task) {

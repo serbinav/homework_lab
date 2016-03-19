@@ -9,12 +9,12 @@ public class Person {
 	private String namePerson;
 	private static Random randomIn;
 
-	public Person(int number){
+	public Person(int number) {
 		randomIn = new Random();
-		this.number = number;	
+		this.number = number;
 		this.namePerson = this.randomName();
 	}
-		
+
 	public int getNumber() {
 		return number;
 	}
@@ -22,7 +22,7 @@ public class Person {
 	public void setNumber(int number) {
 		this.number = number;
 	}
-	
+
 	public String getNamePerson() {
 		return this.namePerson;
 	}
@@ -30,31 +30,31 @@ public class Person {
 	public void setNamePerson(String namePerson) {
 		this.namePerson = namePerson;
 	}
-	
+
 	public Task createTask() {
-		
+
 		Task newPizza = new Task();
-		
-		newPizza.setSize(randomInt(10)+1);
+
+		newPizza.setSize(randomInt(10) + 1);
 
 		List<Ingredient> component = new ArrayList<>();
-				
+
 		component.add(new Ingredient("сыр", randomInt(10)));
 		component.add(new Ingredient("колбаса", randomInt(10)));
 		component.add(new Ingredient("перец", randomInt(10)));
-		
+
 		newPizza.setListIngredients(component);
-		
+
 		return newPizza;
 	}
-	
+
 	// ----------------------------------Random--------------------------------------------
 	public int randomInt(int upTo) {
 		int number = 0;
 		number = randomIn.nextInt(upTo);
 		return number;
 	}
-		
+
 	public String randomName() {
 		String[] w3;
 		w3 = new String[41];
@@ -143,7 +143,7 @@ public class Person {
 		w4[38] = "тероп";
 		w4[39] = "санио";
 		w4[40] = "пилион";
-		
+
 		StringBuilder msg = new StringBuilder();
 		msg.append(w3[this.randomInt(40)]);
 		msg.append(w4[this.randomInt(40)]);

@@ -53,31 +53,33 @@ public class KitchenerRunnable implements Runnable{
 	@Override
 	public void run() {
 		for (int k = 0; k < 5; k++) {
-					
+
 			Task next = cookQueue.next();
 
 			while (next == null) {
 				try {
+					System.out.println("Клиента не было 100 мс");
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
-					System.err.println("Ошибка sleep: " + e);
+					System.err.println("Ошибка sleep KitchenerRunnable(ожидания заказа): " + e);
 				}
 				next = cookQueue.next();
 			}
-			
+
 			if (this.CheckStockIngredients(next) == false) {
-					this.MinusIngredients(next);
-					
-					System.out.println("Порядковый номер заказа " + next.getClient().getNumber());
-					System.out.println(next.printTask());
-					System.out.println("Поступил от " + next.getClient().getNamePerson());
-					System.out.println("Состояние очереди заказов " + cookQueue.size());
-					System.out.println(newStorage.printListComponent());
-				
+				this.MinusIngredients(next);
+
+				System.out.println("Порядковый номер заказа " + k+1);
+				System.out.println("Порядковый номер клиента " + next.getClient().getNumber());
+				System.out.println(next.printTask());
+				System.out.println("Поступил от " + next.getClient().getNamePerson());
+				System.out.println("Состояние очереди заказов " + cookQueue.size());
+				System.out.println(newStorage.printListComponent());
+
 				try {
 					Thread.sleep(this.cookTime);
 				} catch (InterruptedException e) {
-					System.err.println("Ошибка sleep: " + e);
+					System.err.println("Ошибка sleep KitchenerRunnable(приготовления заказа): " + e);
 				}
 				System.out.println("Заказ готов");
 				System.out.println("--------------------------------------------------------");
@@ -85,6 +87,6 @@ public class KitchenerRunnable implements Runnable{
 
 			this.cooker.cook(next, this.newStorage);
 		}
-		
+
 	}
 }

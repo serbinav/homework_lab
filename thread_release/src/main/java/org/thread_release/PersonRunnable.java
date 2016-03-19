@@ -1,5 +1,7 @@
 package org.thread_release;
 
+import java.util.Random;
+
 import org.printing_module.Person;
 import org.printing_module.Task;
 
@@ -15,6 +17,17 @@ public class PersonRunnable implements Runnable{
 	
 	@Override
 	public void run() {
+		Random random = new Random();
+
+		int number = 0;
+		number = random.nextInt(1000);
+		System.out.println("Клиента пришел через " + number + " мс");
+		try {
+			Thread.sleep(number);
+		} catch (InterruptedException e) {
+			System.err.println("Ошибка sleep PersonRunnable: " + e);
+		}
+
 		Task newTask = this.client.createTask();
 		newTask.setClient(this.client);
 		this.cookQueue.put(newTask);
