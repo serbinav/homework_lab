@@ -69,7 +69,7 @@ public class KitchenerRunnable implements Runnable{
 			if (this.CheckStockIngredients(next) == false) {
 				this.MinusIngredients(next);
 
-				System.out.println("Порядковый номер заказа " + k+1);
+				System.out.println("Порядковый номер заказа " + (k+1));
 				System.out.println("Порядковый номер клиента " + next.getClient().getNumber());
 				System.out.println(next.printTask());
 				System.out.println("Поступил от " + next.getClient().getNamePerson());
