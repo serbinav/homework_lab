@@ -58,7 +58,6 @@ public class KitchenerRunnable implements Runnable{
 
 			while (next == null) {
 				try {
-					System.out.println("Клиента не было 100 мс");
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					System.err.println("Ошибка sleep KitchenerRunnable(ожидания заказа): " + e);
@@ -70,7 +69,6 @@ public class KitchenerRunnable implements Runnable{
 				this.MinusIngredients(next);
 
 				System.out.println("Порядковый номер заказа " + (k+1));
-				System.out.println("Порядковый номер клиента " + next.getClient().getNumber());
 				System.out.println(next.printTask());
 				System.out.println("Поступил от " + next.getClient().getNamePerson());
 				System.out.println("Состояние очереди заказов " + cookQueue.size());

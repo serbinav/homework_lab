@@ -21,7 +21,6 @@ public class PersonRunnable implements Runnable{
 
 		int number = 0;
 		number = random.nextInt(1000);
-		System.out.println("Клиента пришел через " + number + " мс");
 		try {
 			Thread.sleep(number);
 		} catch (InterruptedException e) {
