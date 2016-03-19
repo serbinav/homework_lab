@@ -1,6 +1,7 @@
 package org.thread_release;
 
 import org.printing_module.Person;
+import org.printing_module.Task;
 
 public class PersonRunnable implements Runnable{
 	
@@ -19,7 +20,8 @@ public class PersonRunnable implements Runnable{
 	
 	@Override
 	public void run() {
-		this.cookQueue.put(this.client.createTask());
-
+		Task newTask = this.client.createTask();
+		newTask.setClient(this.client);
+		this.cookQueue.put(newTask);
 	}
 }

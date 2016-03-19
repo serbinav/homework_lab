@@ -14,7 +14,7 @@ public class Person {
 		randomIn = new Random();
 		
 		UUID id = UUID.randomUUID();
-		this.setNamePerson(id.toString().replaceAll("-",""));
+		this.namePerson = id.toString().replaceAll("-","");
 	}
 
 	public Person(int number){
@@ -22,7 +22,7 @@ public class Person {
 		this.number = number;	
 
 		UUID id = UUID.randomUUID();
-		this.setNamePerson(id.toString().replaceAll("-",""));
+		this.namePerson = id.toString().replaceAll("-","");
 	}
 		
 	public int getNumber() {
@@ -34,7 +34,7 @@ public class Person {
 	}
 	
 	public String getNamePerson() {
-		return namePerson;
+		return this.namePerson;
 	}
 
 	public void setNamePerson(String namePerson) {
