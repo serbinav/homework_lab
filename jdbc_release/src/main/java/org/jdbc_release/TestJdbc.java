@@ -7,13 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.postgresql.ds.PGPoolingDataSource;
-
-	//Использовать транзакции
-	//Обновление количества ингредиентов должно изменяться в БД
+import org.printing_module.Person;
+import org.printing_module.Task;
 
 public class TestJdbc {
 
-	//private static final String DB_SERVER_NAME = "jdbc:postgresql://127.0.0.1";
 	private static final String DB_SERVER_NAME = "localhost";
 	private static final int    DB_PORT = 5432;
 	private static final String DB_NAME = "test";
@@ -31,74 +29,126 @@ public class TestJdbc {
 		ds.setMaxConnections(100);
 		ds.setInitialConnections(20);
 
-		// SELECT name, number_ingr FROM storage,ingredient_dict
-		// where storage.id_ingr = ingredient_dict.id;
-
-		// INSERT INTO pizza(size, id_ingr, number_ingr) VALUES (7, 3, 50);
-
-		// INSERT INTO storage(id_ingr, number_ingr) VALUES (3, 100);
-
-	
-		// Создаём соединение
 		try (Connection connection = ds.getConnection()) {
-			System.out.println("Соединение установлено");
+			System.out.println("Соединение с БД установлено");
 
-			// Для использования SQL запросов существуют 3 типа объектов:
-			// 1.Statement: используется для простых случаев без параметров
 			Statement statement = null;
-
 			statement = connection.createStatement();
-			// Выполним запрос
+			ResultSet result1 = statement.executeQuery("select count(*) from storage");
 
-			//"select sign(count(*)) from storage"
-			ResultSet result1 = statement.executeQuery("select sign(count(*)) from storage");
-			// result это указатель на первую строку с выборки
-			// чтобы вывести данные мы будем использовать
-			// метод next() , с помощью которого переходим к следующему элементу
-			System.out.println("Выводим statement");
-				System.out.println(result1.next());
-			
-			
-			ResultSet result2 = statement.executeQuery("select sign(count(*)) test_table");
-			// result это указатель на первую строку с выборки
-			// чтобы вывести данные мы будем использовать
-			// метод next() , с помощью которого переходим к следующему элементу
-			System.out.println("Выводим statement");
-				System.out.println(result1.next());
-			
-			
-//			System.out.println("Номер в выборке #" + result1.getRow() + "\t Количество в базе #"
-//					+ result1.getInt("id_ingr") + "\t" + result1.getString("id"));
-			
-			// Вставить запись
-			/*
-			 * statement.executeUpdate(
-			 * "INSERT INTO ingredient(name) values('name')"); //Обновить запись
-			 * statement.executeUpdate(
-			 * "UPDATE ingredient SET name = 'admin' where id = 1");
-			 */
-
-			// 2.пример транзакции
-			Statement st = connection.createStatement();
-			connection.setAutoCommit(false);
-			try {
-				st.execute("INSERT INTO pizza(id_pizza, size, id_ingr, number_ingr) VALUES (1, 7, 3, 50)");
-				st.executeUpdate("UPDATE storage SET number_ingr=number_ingr-50 WHERE id_ingr = 3");
-
-				st.execute("INSERT INTO pizza(id_pizza, size, id_ingr, number_ingr) VALUES (1, 7, 1, 25)");
-				st.executeUpdate("UPDATE storage SET number_ingr=number_ingr-25 WHERE id_ingr = 1");
-
-				connection.commit(); // фиксируем транзакцию
-			} catch (SQLException e) {
-				// Если что-то пошло не так, откатываем всю транзакцию
-				connection.rollback();
+			int count = 0;
+			while (result1.next()) {
+				count = result1.getInt("count");
 			}
 
+			if (count == 0) {
+				System.err.println("Ошибка: склад пуст, ингридиенты будут добавлены");
 
+				PreparedStatement preparedStatementInsert = null;
+				preparedStatementInsert = connection.prepareStatement("INSERT INTO storage (id, id_ingr, number_ingr) VALUES (?, ?, ?)");
+				
+				connection.setAutoCommit(false);
+				try {
+					for (int i = 1; i < 4; i++) {
+						preparedStatementInsert.setInt(1, i);
+						preparedStatementInsert.setInt(2, i);
+						preparedStatementInsert.setInt(3, 100);
+						preparedStatementInsert.executeUpdate();
+					}
+					connection.commit();
+				} catch (SQLException e) {
+					connection.rollback();
+					System.err.println("Ошибка при добавлении ингридиентов на склад");
+				}
+				connection.setAutoCommit(true);
+			} else {
+				System.out.println("На складе присутствуют запасы");
+			}
+
+			Person client;
+			client = new Person(1);
+			Task newTask = client.createTask();
+			System.out.println("Сгенерировали заказ");
+			newTask.setClient(client);
+
+			boolean flagError = false;
+			System.out.println("Проверям наличие ингридиентов на складе");
+			for (int q = 0; q < newTask.getListIngredients().size(); q++) {
+				String ingrName = newTask.getListIngredients().get(q).getName();
+				int ingrNumber = newTask.getListIngredients().get(q).getNumber();
+
+				PreparedStatement preparedStatement = null;
+				preparedStatement = connection.prepareStatement("SELECT name, number_ingr FROM storage,ingredient_dict"
+						+ " where storage.id_ingr = ingredient_dict.id and name = ?");
+
+				preparedStatement.setString(1, ingrName);
+				ResultSet result2 = preparedStatement.executeQuery();
+
+				int ingrNumberStorage = 0;
+				while (result2.next()) {
+					ingrNumberStorage = result2.getInt("number_ingr");
+				}
+
+				if (ingrNumberStorage < ingrNumber) {
+					System.err.println("Ошибка: недостаточно ингридиента: \"" + ingrName + "\" для обработки заказа");
+					flagError = true;
+					break;
+				}
+			}
+
+			if (flagError == true) {
+				return;
+			}
+
+			PreparedStatement preparedStatement1 = null;
+			preparedStatement1 = connection.prepareStatement(
+					"INSERT INTO pizza(id_pizza, size, id_ingr, number_ingr) VALUES (?, ?, (SELECT id FROM ingredient_dict where name = ?), ?)");
+			PreparedStatement preparedStatement2 = null;
+			preparedStatement2 = connection.prepareStatement(
+					"UPDATE storage SET number_ingr=number_ingr-? WHERE id_ingr = (SELECT id FROM ingredient_dict "
+							+ " where name = ?)");
+
+			ResultSet result2 = statement.executeQuery("SELECT MAX(id_pizza) FROM pizza");
+
+			int max = 0;
+			while (result2.next()) {
+				max = result2.getInt("MAX");
+			}
+
+			if (max == 0) {
+				max = 1;
+			} else {
+				max = max + 1;
+			}
+			System.out.println("Забираем игридиенты для приготовления пиццы");
+			connection.setAutoCommit(false);
+			try {
+
+				for (int p = 0; p < newTask.getListIngredients().size(); p++) {
+
+					String ingrName = newTask.getListIngredients().get(p).getName();
+					int ingrNumber = newTask.getListIngredients().get(p).getNumber();
+
+					preparedStatement1.setInt(1, max);
+					preparedStatement1.setInt(2, newTask.getSize());
+					preparedStatement1.setString(3, ingrName);
+					preparedStatement1.setInt(4, ingrNumber);
+					preparedStatement1.executeUpdate();
+
+					preparedStatement2.setInt(1, ingrNumber);
+					preparedStatement2.setString(2, ingrName);
+					preparedStatement2.executeUpdate();
+
+				}
+				connection.commit();
+			} catch (SQLException e) {
+				connection.rollback();
+				System.err.println("Ошибка при вычитании ингридиентов ");
+			}
+			connection.setAutoCommit(true);
+			System.out.println("Пицца готова");
 		} catch (Exception ex) {
-			// выводим наиболее значимые сообщения
-			System.err.println(ex);
+			System.err.println("Ошибка: " + ex);
 		}
-
 	}
 }

@@ -12,12 +12,14 @@ public class KitchenerRunnable implements Runnable{
 	private TaskQueue cookQueue;
 	private Kitchener cooker;
 	private Storage newStorage;
+	private int totalClient;
 	private int cookTime;
 	
-	public KitchenerRunnable(TaskQueue cookQueue, Storage newStorage, int cookTime) {
+	public KitchenerRunnable(TaskQueue cookQueue, Storage newStorage, int totalClient,int cookTime) {
 		this.cooker = new Kitchener();
 		this.cookQueue = cookQueue;
 		this.newStorage = newStorage;
+		this.totalClient = totalClient;
 		this.cookTime = cookTime;
 	}
 	
@@ -52,7 +54,7 @@ public class KitchenerRunnable implements Runnable{
 
 	@Override
 	public void run() {
-		for (int k = 0; k < 5; k++) {
+		for (int k = 0; k < totalClient; k++) {
 
 			Task next = cookQueue.next();
 
