@@ -23,7 +23,7 @@
 			  <configuration>
 			    <archive>
 			      <manifest>
-			        <mainClass>org.console_app.TestSerialize</mainClass>
+			        <mainClass>org.jdbc_release.TestJdbc</mainClass>
 			      </manifest>
 			    </archive>
 			    <descriptorRefs>

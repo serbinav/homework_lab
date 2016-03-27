@@ -70,10 +70,20 @@ public class KitchenerRunnable implements Runnable{
 			if (this.CheckStockIngredients(next) == false) {
 				this.MinusIngredients(next);
 
-				System.out.println("Порядковый номер заказа " + (k+1));
+				System.out.println("Порядковый номер заказа: " + (k+1));
 				System.out.println(next.printTask());
-				System.out.println("Поступил от " + next.getClient().getNamePerson());
-				System.out.println("Состояние очереди заказов " + cookQueue.size());
+				System.out.println("Заказ поступил от " + next.getClient().getNamePerson());
+				System.out.println("Состояние очереди заказов: " + cookQueue.size());		
+				if(cookQueue.size() > 0){
+					System.out.println("ghbdtn");	
+					
+/*					for (int i = 0; i < cookQueue.size(); i++) {
+						output.append(listComponent.get(i).getName());
+						output.append(" - ");
+						output.append(listComponent.get(i).getNumber());
+					}
+*/					
+				}
 				System.out.println(newStorage.printListComponent());
 
 				try {

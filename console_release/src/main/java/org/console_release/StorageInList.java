@@ -52,12 +52,14 @@ public class StorageInList implements Storage {
 	@Override
 	public String printListComponent() {
 		StringBuilder output = new StringBuilder();
-		output.append("На складе имеется: ");
-		for (Ingredient ingredient : listComponent) {
-			output.append(ingredient.getName());
-			output.append(" ");
-			output.append(ingredient.getNumber());
-			output.append(" ");
+		output.append("На складе осталось: ");
+		for (int i = 0; i < listComponent.size(); i++) {
+			output.append(listComponent.get(i).getName());
+			output.append(" - ");
+			output.append(listComponent.get(i).getNumber());
+			if (i + 1 < listComponent.size()) {
+				output.append(", ");
+			}
 		}
 		return output.toString();
 	}

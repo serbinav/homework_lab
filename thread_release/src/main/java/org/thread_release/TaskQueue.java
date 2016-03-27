@@ -33,7 +33,7 @@ public class TaskQueue
 			lock.unlock();
 	    }
 	}
-
+	
 	public int size() {
 		int format;
 		lock.lock();
@@ -43,5 +43,16 @@ public class TaskQueue
 			lock.unlock();
 		}
 		return format;
+	}
+	
+	public Task get(int elem) {
+		Task tmpTask;
+		lock.lock();
+		try {
+			tmpTask = tasks.peek();
+		} finally {
+			lock.unlock();
+		}
+		return tmpTask;
 	}
 }

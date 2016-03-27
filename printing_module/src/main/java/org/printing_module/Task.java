@@ -36,12 +36,14 @@ public class Task {
 	public String printTask() {
 		StringBuilder output = new StringBuilder();
 		output.append("Пицца размером: " + this.size);
-		output.append(" Состаящая из: ");
-		for (Ingredient ingredient : listIngredients) {
-			output.append(ingredient.getName());
-			output.append(" ");
-			output.append(ingredient.getNumber());
-			output.append(" ");
+		output.append(". Состаящая из: ");
+		for (int i = 0; i < listIngredients.size(); i++) {
+			output.append(listIngredients.get(i).getName());
+			output.append(" - ");
+			output.append(listIngredients.get(i).getNumber());
+			if (i + 1 < listIngredients.size()) {
+				output.append(", ");
+			}
 		}
 		return output.toString();
 	}
