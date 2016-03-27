@@ -1,7 +1,7 @@
 package org.thread_release;
 
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -11,17 +11,21 @@ public class TaskQueue
 { 
 	private Lock lock = new ReentrantLock();
 	
-	private final Queue<Task> tasks = new LinkedList<>();
-
+	private final List<Task> tasks = new LinkedList<>();
+	
 	public Task next() {
 		Task tmpTask;
 		lock.lock();
 		try {
-			tmpTask = tasks.poll();
+			if (tasks.size() == 0) {
+				return null;
+			}
+			tmpTask = tasks.get(0);
+			tasks.remove(0);
+			return tmpTask;			
 		} finally {
 			lock.unlock();
 		}
-		return tmpTask;
 	}
 	        
 	public void put(Task task) {
@@ -49,7 +53,7 @@ public class TaskQueue
 		Task tmpTask;
 		lock.lock();
 		try {
-			tmpTask = tasks.peek();
+			tmpTask = tasks.get(elem);
 		} finally {
 			lock.unlock();
 		}
