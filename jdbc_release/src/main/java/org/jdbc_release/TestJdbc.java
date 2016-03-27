@@ -16,48 +16,39 @@ public class TestJdbc {
 	private static final String DB_NAME = "test";
 	private static final String DB_USER = "postgres";
 	private static final String DB_PASSWORD = "12345678";
+	
+	private static final String selectCountStorage = "select count(*) from storage";
+	private static final String insertStorage = "INSERT INTO storage (id, id_ingr, number_ingr) VALUES (?, ?, ?)";
+	private static final String selectIngredientStorage = "SELECT name, number_ingr FROM storage,ingredient_dict where storage.id_ingr = ingredient_dict.id and name = ?";
+	private static final String selectMaxPizza = "SELECT MAX(id_pizza) FROM pizza";
+	private static final String insertPizza = "INSERT INTO pizza(id_pizza, size, id_ingr, number_ingr) VALUES (?, ?, (SELECT id FROM ingredient_dict where name = ?), ?)";
+	private static final String updateStorage = "UPDATE storage SET number_ingr=number_ingr-? WHERE id_ingr = (SELECT id FROM ingredient_dict where name = ?)";
 
+	/**
+	 * 
+	 * @param conn
+	 * @return
+	 */
 	public int selectStorage(Connection conn) {
-		Statement selectStatement = null;
-		ResultSet selectResult = null;
 		int count = 0;
-		try {
-			selectStatement = conn.createStatement();
-			selectResult = selectStatement.executeQuery("select count(*) from storage");
-
+		try (Statement selectStatement = conn.createStatement();
+				ResultSet selectResult = selectStatement.executeQuery(selectCountStorage)) {
 			while (selectResult.next()) {
 				count = selectResult.getInt("count");
 			}
 		} catch (SQLException es) {
 			System.err.println("Ошибка в проверке наличия ингридиентов на складе: " + es);
-		} finally {
-			try {
-				if (selectResult != null)
-					selectResult.close();
-			} catch (SQLException esr) {
-				System.err.println(
-						"Ошибка в проверке наличия ингридиентов на складе(в получении результатов): " + esr);
-			} finally {
-				try {
-					if (selectStatement != null)
-						selectStatement.close();
-				} catch (SQLException ess) {
-					System.err.println(
-							"Ошибка в проверке наличия ингридиентов на складе(в выполнении запроса): " + ess);
-				}
-			}
 		}
 		return count;
 	}
 
+	/**
+	 * 
+	 * @param conn
+	 * @return
+	 */
 	public void insertStorage(Connection conn) {
-		PreparedStatement prepStateInsertStorage = null;
-		String insertString = "INSERT INTO storage (id, id_ingr, number_ingr) VALUES (?, ?, ?)";
-
-		try {
-			conn.setAutoCommit(false);
-			prepStateInsertStorage = conn.prepareStatement(insertString);
-
+		try (PreparedStatement prepStateInsertStorage = conn.prepareStatement(insertStorage)){
 			for (int i = 1; i < 4; i++) {
 				prepStateInsertStorage.setInt(1, i);
 				prepStateInsertStorage.setInt(2, i);
@@ -71,31 +62,19 @@ public class TestJdbc {
 			} catch (SQLException er) {
 				System.err.println("Ошибка при добавлении ингридиентов на склад(откат транзакции) " + er);
 			}
-		} finally {
-			if (prepStateInsertStorage != null) {
-				try {
-					prepStateInsertStorage.close();
-				} catch (SQLException ec) {
-					System.err.println("Ошибка при добавлении ингридиентов на склад(закрытии соединения) " + ec);
-				}
-			}
-			try {
-				conn.setAutoCommit(true);
-			} catch (SQLException eac) {
-				System.err.println("Ошибка при добавлении ингридиентов на склад(включении автокоммита) " + eac);
-			}
-		}
+		} 
 	}
 
+	/**
+	 * 
+	 * @param conn
+	 * @return
+	 */
 	public int selectIngredient(Connection conn, String ingrName) {
-		PreparedStatement prepStateSelect = null;
-		String selectString = "SELECT name, number_ingr FROM storage,ingredient_dict"
-				+ " where storage.id_ingr = ingredient_dict.id and name = ?";
 		int ingrNumberStorage = 0;
 		ResultSet resultSelect = null;
-		try {
-			prepStateSelect = conn.prepareStatement(selectString);
-
+		try (PreparedStatement prepStateSelect = conn.prepareStatement(selectIngredientStorage)){
+//!!!***
 			prepStateSelect.setString(1, ingrName);
 			resultSelect = prepStateSelect.executeQuery();
 
@@ -104,72 +83,47 @@ public class TestJdbc {
 			}
 		} catch (SQLException ep) {
 			System.err.println("Ошибка в получении количества ингридиентов со склада: " + ep);
-		} finally {
+			
+		} 
+		finally {
 			try {
 				if (resultSelect != null)
 					resultSelect.close();
 			} catch (SQLException esr) {
-				System.err.println(
-						"Ошибка в получении количества ингридиентов со склада(в получении результатов): "
-								+ esr);
-			} finally {
-				try {
-					if (prepStateSelect != null)
-						prepStateSelect.close();
-				} catch (SQLException pss) {
-					System.err.println(
-							"Ошибка в получении количества ингридиентов со склада(в выполнении запроса): "
-									+ pss);
-				}
-			}
+				System.err.println(esr);
+			} 
 		}
 		return ingrNumberStorage;
 	}
 	
+	/**
+	 * 
+	 * @param conn
+	 * @return
+	 */
 	public int selectPizza(Connection conn) {
-		Statement selectMaxStatement = null;
-		ResultSet selectMaxResult = null;
 		int max = 0;
-		try {
-			selectMaxStatement = conn.createStatement();
-			selectMaxResult = selectMaxStatement.executeQuery("SELECT MAX(id_pizza) FROM pizza");
-
+		try (Statement selectMaxStatement  = conn.createStatement();
+				ResultSet selectMaxResult = selectMaxStatement.executeQuery(selectMaxPizza)){
+			
 			while (selectMaxResult.next()) {
 				max = selectMaxResult.getInt("MAX");
 			}
 		} catch (SQLException es) {
 			System.err.println("Ошибка при проверке списка готовых пицц: " + es);
-		} finally {
-			try {
-				if (selectMaxResult != null)
-					selectMaxResult.close();
-			} catch (SQLException esr) {
-				System.err.println("Ошибка при проверке списка готовых пицц(в получении результатов): " + esr);
-			} finally {
-				try {
-					if (selectMaxStatement != null)
-						selectMaxStatement.close();
-				} catch (SQLException ess) {
-					System.err.println("Ошибка при проверке списка готовых пицц(в выполнении запроса): " + ess);
-				}
-			}
-		}
+		} 
 		return max;
 	}
 	
-	public void insertPizzaUpdateStorage(Connection conn, Task newTask, int nextNumber) {
-		PreparedStatement prepStateInsertPizza = null;
-		PreparedStatement prepStateUpdateStorage = null;
-
-		String insertPizzaString = "INSERT INTO pizza(id_pizza, size, id_ingr, number_ingr) VALUES (?, ?, (SELECT id FROM ingredient_dict where name = ?), ?)";
-		String updateStorageString = "UPDATE storage SET number_ingr=number_ingr-? WHERE id_ingr = (SELECT id FROM ingredient_dict "
-				+ " where name = ?)";
-
+	/**
+	 * 
+	 * @param conn
+	 * @return
+	 */
+	public void insertPizzaUpdateStorage(Connection conn, Task newTask, int nextNumber) {	
 		System.out.println("Забираем игридиенты для приготовления пиццы");
-		try {
-			conn.setAutoCommit(false);
-			prepStateInsertPizza = conn.prepareStatement(insertPizzaString);
-			prepStateUpdateStorage = conn.prepareStatement(updateStorageString);
+		try (PreparedStatement prepStateInsertPizza = conn.prepareStatement(insertPizza);
+				PreparedStatement prepStateUpdateStorage = conn.prepareStatement(updateStorage)){
 
 			for (int p = 0; p < newTask.getListIngredients().size(); p++) {
 				String ingrName = newTask.getListIngredients().get(p).getName();
@@ -190,38 +144,11 @@ public class TestJdbc {
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				System.err.println("Ошибка при вычитании ингридиентов ");
 			}
-			System.err.println("Ошибка при вычитании ингридиентов ");
-		} finally {
-			if (prepStateInsertPizza != null) {
-				try {
-					prepStateInsertPizza.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			if (prepStateUpdateStorage != null) {
-				try {
-					prepStateUpdateStorage.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			try {
-				conn.setAutoCommit(true);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		} 
 	}
 		
-	// разбить на модули 20 - 40 строк
-	// вложенность не больее 4 уровней
 	public static void main(String[] args) {
 		TestJdbc app = new TestJdbc();
 
@@ -240,17 +167,17 @@ public class TestJdbc {
 			if (app.selectStorage(connection) == 0) {
 				System.err.println("Ошибка: склад пуст, ингридиенты будут добавлены");
 
+				connection.setAutoCommit(false);
 				app.insertStorage(connection);
+				connection.setAutoCommit(true);
 
 			} else {
 				System.out.println("На складе присутствуют запасы");
 			}
 
-			Person client;
-			client = new Person(1);
+			Person client = new Person(1);
 			Task newTask = client.createTask();
 			System.out.println("Сгенерировали заказ");
-			newTask.setClient(client);
 
 			boolean flagError = false;
 			System.out.println("Проверям наличие ингридиентов на складе");
@@ -276,7 +203,9 @@ public class TestJdbc {
 				nextNumber = nextNumber + 1;
 			}
 			
-			app.insertPizzaUpdateStorage(connection, newTask, nextNumber);
+			connection.setAutoCommit(false);
+			app.insertPizzaUpdateStorage(connection, newTask, nextNumber);		
+			connection.setAutoCommit(true);
 
 			System.out.println("Пицца готова");
 		} catch (SQLException ex) {

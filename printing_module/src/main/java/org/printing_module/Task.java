@@ -9,6 +9,10 @@ public class Task {
 	private List<Ingredient> listIngredients;
 	private Person client;
 
+	public Task(Person person) {
+		this.client = person;
+	}
+
 	public int getSize() {
 		return size;
 	}

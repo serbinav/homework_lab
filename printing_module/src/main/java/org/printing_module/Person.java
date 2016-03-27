@@ -33,7 +33,7 @@ public class Person {
 
 	public Task createTask() {
 
-		Task newPizza = new Task();
+		Task newPizza = new Task(this);
 
 		newPizza.setSize(randomInt(10) + 1);
 
