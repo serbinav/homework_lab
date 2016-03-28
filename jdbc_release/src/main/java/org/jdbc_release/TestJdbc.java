@@ -137,6 +137,20 @@ public class TestJdbc {
 		}
 	}
 
+	public boolean checkIngrNumber(Connection conn, Task newTask) {
+		System.out.println("Проверям наличие ингридиентов на складе");
+		for (int q = 0; q < newTask.getListIngredients().size(); q++) {
+			String ingrName = newTask.getListIngredients().get(q).getName();
+			int ingrNumber = newTask.getListIngredients().get(q).getNumber();
+
+			if (selectIngredient(conn, ingrName) < ingrNumber) {
+				System.err.println("Ошибка: недостаточно ингридиента: \"" + ingrName + "\" для обработки заказа");
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static void main(String[] args) {
 		TestJdbc app = new TestJdbc();
 
@@ -167,22 +181,10 @@ public class TestJdbc {
 			Task newTask = client.createTask();
 			System.out.println("Сгенерировали заказ");
 
-			boolean flagError = false;
-			System.out.println("Проверям наличие ингридиентов на складе");
-			for (int q = 0; q < newTask.getListIngredients().size(); q++) {
-				String ingrName = newTask.getListIngredients().get(q).getName();
-				int ingrNumber = newTask.getListIngredients().get(q).getNumber();
-
-				if (app.selectIngredient(connection, ingrName) < ingrNumber) {
-					System.err.println("Ошибка: недостаточно ингридиента: \"" + ingrName + "\" для обработки заказа");
-					flagError = true;
-					break;
-				}
-			}
-
-			if (flagError == true) {
+			if (app.checkIngrNumber(connection, newTask) == true) {
 				return;
 			}
+
 			int nextNumber = app.selectPizza(connection);
 
 			if (nextNumber == 0) {
