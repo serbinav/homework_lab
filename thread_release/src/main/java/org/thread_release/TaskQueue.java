@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.printing_module.Ingredient;
 import org.printing_module.Storage;
 import org.printing_module.Task;
 
-public class TaskQueue 
-{ 
+public class TaskQueue {
 	private Lock lock = new ReentrantLock();
 	private final List<Task> tasks = new LinkedList<>();
 	private int globalSize = 0;
@@ -18,7 +18,7 @@ public class TaskQueue
 	public TaskQueue(Storage newStorage) {
 		this.newStorage = newStorage;
 	}
-	
+
 	public Task next() {
 		Task tmpTask;
 		lock.lock();
@@ -28,19 +28,20 @@ public class TaskQueue
 			}
 			tmpTask = tasks.get(0);
 			tasks.remove(0);
-			return tmpTask;			
+			return tmpTask;
 		} finally {
 			lock.unlock();
 		}
 	}
-	        
+
 	public void put(Task task) {
 		lock.lock();
-	    try{
+		try {
 			tasks.add(task);
-	    	globalSize = globalSize+1;
-			
-			System.out.println("Поступил заказ № "+this.globalSize +" от " + task.getClient().getNamePerson()+"(" + task.printTask() + ")");
+			globalSize++;
+
+			System.out.println("Поступил заказ № " + this.globalSize + " от " + task.getClient().getNamePerson() + "("
+					+ task.printTask() + ")");
 			StringBuilder tmpString = new StringBuilder();
 			if (tasks.size() > 0) {
 				for (int i = 0; i < tasks.size(); i++) {
@@ -50,23 +51,22 @@ public class TaskQueue
 				System.out.println("очередь заказов: " + tmpString.toString());
 			}
 			System.out.println("На складе осталось: " + newStorage.printListComponent());
-	    }
-	    finally{
+		} finally {
 			lock.unlock();
-	    }
+		}
 	}
-	
+
 	public int size() {
 		int format;
 		lock.lock();
 		try {
-			format = tasks.size();	
+			format = tasks.size();
 		} finally {
 			lock.unlock();
 		}
 		return format;
 	}
-	
+
 	public Task get(int elem) {
 		Task tmpTask;
 		lock.lock();
@@ -76,5 +76,46 @@ public class TaskQueue
 			lock.unlock();
 		}
 		return tmpTask;
+	}
+
+	public boolean checkStockIngredients(Task next) {
+		lock.lock();
+		try {
+			List<Ingredient> tmpList = next.getListIngredients();
+
+			for (int q = 0; q < tmpList.size(); q++) {
+				String ingrName = tmpList.get(q).getName();
+				int ingrNumber = tmpList.get(q).getNumber();
+
+				int ingrNumberStorage = this.newStorage.getCountByName(ingrName);
+
+				if (ingrNumberStorage < ingrNumber) {
+					System.err.println("Ошибка: недостатоно ингридиентов для обработки заказа");
+					return true;
+				}
+			}
+		} finally {
+			lock.unlock();
+		}
+		return false;
+	}
+
+	public void minusIngredients(Task next) {
+		lock.lock();
+		try {
+			List<Ingredient> tmpList = next.getListIngredients();
+
+			for (int q = 0; q < tmpList.size(); q++) {
+				String ingrName = tmpList.get(q).getName();
+				int ingrNumber = tmpList.get(q).getNumber();
+
+				int n = this.newStorage.getIndexByName(ingrName);
+				List<Ingredient> tempList = this.newStorage.getListComponent();
+				tempList.get(n).setNumber(this.newStorage.getCountByName(ingrName) - ingrNumber);
+				this.newStorage.setListComponent(tempList);
+			}
+		} finally {
+			lock.unlock();
+		}
 	}
 }

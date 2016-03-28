@@ -61,7 +61,7 @@ public class TestThread {
 		newStorage.setListComponent(listComponent);
 
 		TaskQueue cookQueue = new TaskQueue(newStorage);
-		Runnable kitchenerRunnable = new KitchenerRunnable(cookQueue, newStorage, totalClient, COOK_TIME);
+		Runnable kitchenerRunnable = new KitchenerRunnable(cookQueue, totalClient, COOK_TIME);
 
 		for (int c = 0; c < totalClient; c++) {
 			Runnable personRunnable = new PersonRunnable(cookQueue, c + 1);
