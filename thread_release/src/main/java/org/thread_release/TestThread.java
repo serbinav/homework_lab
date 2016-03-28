@@ -66,7 +66,7 @@ public class TestThread {
 		for (int c = 0; c < totalClient; c++) {
 			Runnable personRunnable = new PersonRunnable(cookQueue, c + 1);
 			Thread clientThread = new Thread(personRunnable);
-			clientThread.start();
+			clientThread.start();	
 		}
 
 		Thread cookThread = new Thread(kitchenerRunnable);
@@ -78,4 +78,21 @@ public class TestThread {
 			System.err.println("Ошибка: " + e);
 		}
 	}
+	
+/*	- поступил заказ №1 от клиента №1 (состав:…); очередь заказов:…,склад:...
+
+	- поступил заказ №2 от клиента №3 (состав:…); очередь заказов:…,склад:...
+
+	- поступил заказ №3 от клиента №5 (состав:…); очередь заказов:…,склад:...
+
+	- заказ №1 готов.
+
+	- поступил заказ №4 от клиента №2 (состав:…); очередь заказов:…,склад:...
+
+	- поступил заказ №5 от клиента №1 (состав:…); очередь заказов:…,склад:...
+
+	- заказ №2 готов.
+
+	- заказ №3 готов.*/
+	
 }

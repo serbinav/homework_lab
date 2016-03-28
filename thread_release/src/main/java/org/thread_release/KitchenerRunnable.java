@@ -72,25 +72,13 @@ public class KitchenerRunnable implements Runnable {
 			if (this.checkStockIngredients(next) == false) {
 				this.minusIngredients(next);
 
-				System.out.println("Порядковый номер заказа: " + (k + 1));
-				System.out.println(next.printTask());
-				System.out.println("Заказ поступил от " + next.getClient().getNamePerson());
-				System.out.println("Состояние очереди заказов: ");
-				if (cookQueue.size() > 0) {
-					for (int i = 0; i < cookQueue.size(); i++) {
-						System.out.println(" № " + cookQueue.get(i).getClient().getNumber() + " - "
-								+ cookQueue.get(i).getClient().getNamePerson());
-					}
-				}
-				System.out.println(newStorage.printListComponent());
-
 				try {
 					Thread.sleep(this.cookTime);
 				} catch (InterruptedException e) {
 					System.err.println("Ошибка sleep KitchenerRunnable(приготовления заказа): " + e);
-				}
-				System.out.println("Заказ готов");
-				System.out.println("--------------------------------------------------------");
+				}				
+				
+				System.out.println("Порядковый номер заказа: " + (k + 1) + ". Заказ готов");
 			}
 
 			this.cooker.cook(next, this.newStorage);

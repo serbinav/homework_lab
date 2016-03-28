@@ -12,11 +12,6 @@ public class Person {
 	private String[] partTwo;
 
 	public Person(int number) {
-		randomIn = new Random();
-		this.number = number;
-		this.namePerson = this.randomName();
-
-		String[] partOne;
 		partOne = new String[41];
 		partOne[0] = "Арт";
 		partOne[1] = "Фолл";
@@ -60,7 +55,6 @@ public class Person {
 		partOne[39] = "Водсаф";
 		partOne[40] = "Ланеп";
 
-		String[] partTwo;
 		partTwo = new String[41];
 		partTwo[0] = "пил";
 		partTwo[1] = "ренайт";
@@ -103,6 +97,11 @@ public class Person {
 		partTwo[38] = "тероп";
 		partTwo[39] = "санио";
 		partTwo[40] = "пилион";
+		
+		randomIn = new Random();
+		this.number = number;
+		this.namePerson = this.randomName();
+
 	}
 
 	public int getNumber() {

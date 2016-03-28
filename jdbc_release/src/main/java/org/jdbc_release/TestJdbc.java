@@ -17,12 +17,12 @@ public class TestJdbc {
 	private static final String DB_USER = "postgres";
 	private static final String DB_PASSWORD = "12345678";
 
-	private static final String SELECT_COUNT_STORAGE = "select count(*) from storage";
+	private static final String SELECT_COUNT_STORAGE = "SELECT count(*) FROM storage";
 	private static final String INSERT_STORAGE = "INSERT INTO storage (id, id_ingr, number_ingr) VALUES (?, ?, ?)";
-	private static final String SELECT_INGREDIENT_STORAGE = "SELECT name, number_ingr FROM storage,ingredient_dict where storage.id_ingr = ingredient_dict.id and name = ?";
+	private static final String SELECT_INGREDIENT_STORAGE = "SELECT name, number_ingr FROM storage,ingredient_dict WHERE storage.id_ingr = ingredient_dict.id and name = ?";
 	private static final String SELECT_MAX_PIZZA = "SELECT MAX(id_pizza) FROM pizza";
-	private static final String INSERT_PIZZA = "INSERT INTO pizza(id_pizza, size, id_ingr, number_ingr) VALUES (?, ?, (SELECT id FROM ingredient_dict where name = ?), ?)";
-	private static final String UPDATE_STORAGE = "UPDATE storage SET number_ingr=number_ingr-? WHERE id_ingr = (SELECT id FROM ingredient_dict where name = ?)";
+	private static final String INSERT_PIZZA = "INSERT INTO pizza(id_pizza, size, id_ingr, number_ingr) VALUES (?, ?, (SELECT id FROM ingredient_dict WHERE name = ?), ?)";
+	private static final String UPDATE_STORAGE = "UPDATE storage SET number_ingr=number_ingr-? WHERE id_ingr = (SELECT id FROM ingredient_dict WHERE name = ?)";
 
 	/**
 	 * проверка "есть ли ингридиенты на складе"
@@ -31,7 +31,7 @@ public class TestJdbc {
 		int count = 0;
 		try (Statement selectStatement = conn.createStatement();
 				ResultSet selectResult = selectStatement.executeQuery(SELECT_COUNT_STORAGE)) {
-			while (selectResult.next()) {
+			if (selectResult.next()) {
 				count = selectResult.getInt("count");
 			}
 		} catch (SQLException es) {
@@ -70,7 +70,7 @@ public class TestJdbc {
 		try (PreparedStatement prepStateSelect = conn.prepareStatement(SELECT_INGREDIENT_STORAGE)) {
 			prepStateSelect.setString(1, ingrName);
 			try (ResultSet resultSelect = prepStateSelect.executeQuery()) {
-				while (resultSelect.next()) {
+				if (resultSelect.next()) {
 					ingrNumberStorage = resultSelect.getInt("number_ingr");
 				}
 			} catch (SQLException esr) {
@@ -91,7 +91,7 @@ public class TestJdbc {
 		try (Statement selectMaxStatement = conn.createStatement();
 				ResultSet selectMaxResult = selectMaxStatement.executeQuery(SELECT_MAX_PIZZA)) {
 
-			while (selectMaxResult.next()) {
+			if (selectMaxResult.next()) {
 				max = selectMaxResult.getInt("MAX");
 			}
 		} catch (SQLException es) {
