@@ -77,7 +77,12 @@ public class TaskQueue {
 		}
 		return tmpTask;
 	}
-
+	
+	/**
+	 * 
+	 * @param next
+	 * @return
+	 */
 	public boolean checkStockIngredients(Task next) {
 		lock.lock();
 		try {
@@ -100,6 +105,11 @@ public class TaskQueue {
 		return false;
 	}
 
+	/**
+	 * 
+	 * @param next
+	 * @return
+	 */
 	public void minusIngredients(Task next) {
 		lock.lock();
 		try {
