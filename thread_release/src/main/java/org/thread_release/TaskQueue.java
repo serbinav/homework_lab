@@ -5,13 +5,19 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.printing_module.Storage;
 import org.printing_module.Task;
 
 public class TaskQueue 
 { 
 	private Lock lock = new ReentrantLock();
-	
 	private final List<Task> tasks = new LinkedList<>();
+	private int globalSize = 0;
+	private Storage newStorage;
+
+	public TaskQueue(Storage newStorage) {
+		this.newStorage = newStorage;
+	}
 	
 	public Task next() {
 		Task tmpTask;
@@ -32,6 +38,18 @@ public class TaskQueue
 		lock.lock();
 	    try{
 			tasks.add(task);
+	    	globalSize = globalSize+1;
+			
+			System.out.println("Поступил заказ № "+this.globalSize +" от " + task.getClient().getNamePerson()+"(" + task.printTask() + ")");
+			StringBuilder tmpString = new StringBuilder();
+			if (tasks.size() > 0) {
+				for (int i = 0; i < tasks.size(); i++) {
+					tmpString.append(" № " + tasks.get(i).getClient().getNumber() + " - "
+							+ tasks.get(i).getClient().getNamePerson() + " ");
+				}
+				System.out.println("очередь заказов: " + tmpString.toString());
+			}
+			System.out.println("На складе осталось: " + newStorage.printListComponent());
 	    }
 	    finally{
 			lock.unlock();

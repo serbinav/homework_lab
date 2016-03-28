@@ -30,20 +30,5 @@ public class PersonRunnable implements Runnable{
 		Task newTask = this.client.createTask();
 		newTask.setClient(this.client);
 		this.cookQueue.put(newTask);
-		
-//		- поступил заказ №1 тот ли???
-//		от клиента №1 (состав:…); +
-//		очередь заказов:…, +
-//		склад:   -
-
-		System.out.println("Поступил заказ № "+newTask.getClient().getNumber() +" от " + newTask.getClient().getNamePerson()+"(" + newTask.printTask() + ")");
-		StringBuilder tmpString = new StringBuilder();
-		if (cookQueue.size() > 0) {
-			for (int i = 0; i < cookQueue.size(); i++) {
-				tmpString.append(" № " + cookQueue.get(i).getClient().getNumber() + " - "
-						+ cookQueue.get(i).getClient().getNamePerson() + " ");
-			}
-			System.out.println("очередь заказов: " + tmpString.toString());
-		}	
 	}
 }

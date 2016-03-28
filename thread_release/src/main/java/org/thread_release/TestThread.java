@@ -60,7 +60,7 @@ public class TestThread {
 		listComponent.add(new Ingredient("перец", 100));
 		newStorage.setListComponent(listComponent);
 
-		TaskQueue cookQueue = new TaskQueue();
+		TaskQueue cookQueue = new TaskQueue(newStorage);
 		Runnable kitchenerRunnable = new KitchenerRunnable(cookQueue, newStorage, totalClient, COOK_TIME);
 
 		for (int c = 0; c < totalClient; c++) {
@@ -78,21 +78,4 @@ public class TestThread {
 			System.err.println("Ошибка: " + e);
 		}
 	}
-	
-/*	- поступил заказ №1 от клиента №1 (состав:…); очередь заказов:…,склад:...
-
-	- поступил заказ №2 от клиента №3 (состав:…); очередь заказов:…,склад:...
-
-	- поступил заказ №3 от клиента №5 (состав:…); очередь заказов:…,склад:...
-
-	- заказ №1 готов.
-
-	- поступил заказ №4 от клиента №2 (состав:…); очередь заказов:…,склад:...
-
-	- поступил заказ №5 от клиента №1 (состав:…); очередь заказов:…,склад:...
-
-	- заказ №2 готов.
-
-	- заказ №3 готов.*/
-	
 }
