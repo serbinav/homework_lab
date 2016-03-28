@@ -8,8 +8,8 @@ import org.printing_module.Ingredient;
 import org.printing_module.Storage;
 
 public class TestThread {
-	private static final int cookTime = 1000;
-	
+	private static final int COOK_TIME = 1000;
+
 	public boolean testArray(String[] args) {
 		if (args.length == 0) {
 			System.err.println("ошибка: не задан входной параметр");
@@ -28,7 +28,7 @@ public class TestThread {
 
 		try {
 			numberLine = new Integer(numberString);
-			
+
 			if (numberLine < 0) {
 				System.err.println("ошибка: параметр не может быть отрицательным");
 				return -1;
@@ -43,13 +43,11 @@ public class TestThread {
 
 	public static void main(String[] args) {
 		TestThread app = new TestThread();
-		int totalClient = 0;
 
-		if (app.testArray(args) == false) {
+		if (!app.testArray(args)) {
 			return;
 		}
-
-		totalClient = app.convertInt(args[0]);
+		int totalClient = app.convertInt(args[0]);
 		if (totalClient == -1) {
 			return;
 		}
@@ -63,15 +61,15 @@ public class TestThread {
 		newStorage.setListComponent(listComponent);
 
 		TaskQueue cookQueue = new TaskQueue();
-		Runnable KitchenerRunnable = new KitchenerRunnable(cookQueue, newStorage, totalClient,cookTime);
+		Runnable kitchenerRunnable = new KitchenerRunnable(cookQueue, newStorage, totalClient, COOK_TIME);
 
 		for (int c = 0; c < totalClient; c++) {
-			Runnable PersonRunnable = new PersonRunnable(cookQueue, c + 1);
-			Thread clientThread = new Thread(PersonRunnable);
+			Runnable personRunnable = new PersonRunnable(cookQueue, c + 1);
+			Thread clientThread = new Thread(personRunnable);
 			clientThread.start();
 		}
 
-		Thread cookThread = new Thread(KitchenerRunnable);
+		Thread cookThread = new Thread(kitchenerRunnable);
 		cookThread.start();
 
 		try {

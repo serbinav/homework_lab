@@ -40,7 +40,7 @@ public class Task {
 	public String printTask() {
 		StringBuilder output = new StringBuilder();
 		output.append("Пицца размером: " + this.size);
-		output.append(". Состаящая из: ");
+		output.append(". Состоящая из: ");
 		for (int i = 0; i < listIngredients.size(); i++) {
 			output.append(listIngredients.get(i).getName());
 			output.append(" - ");

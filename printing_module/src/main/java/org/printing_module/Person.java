@@ -8,40 +8,122 @@ public class Person {
 	private int number;
 	private String namePerson;
 	private static Random randomIn;
+	private String[] partOne;
+	private String[] partTwo;
 
 	public Person(int number) {
 		randomIn = new Random();
 		this.number = number;
 		this.namePerson = this.randomName();
+
+		String[] partOne;
+		partOne = new String[41];
+		partOne[0] = "Арт";
+		partOne[1] = "Фолл";
+		partOne[2] = "Ка";
+		partOne[3] = "Миу";
+		partOne[4] = "Бик";
+		partOne[5] = "Мик";
+		partOne[6] = "Синд";
+		partOne[7] = "Воль";
+		partOne[8] = "Рей";
+		partOne[9] = "Хал";
+		partOne[10] = "Роб";
+		partOne[11] = "Тимм";
+		partOne[12] = "Бокас";
+		partOne[13] = "Асило";
+		partOne[14] = "Зорт";
+		partOne[15] = "Ногли";
+		partOne[16] = "Седи";
+		partOne[17] = "Верполь";
+		partOne[18] = "Динреп";
+		partOne[19] = "Гольд";
+		partOne[20] = "Шайн";
+		partOne[21] = "Каплон";
+		partOne[22] = "Верило";
+		partOne[23] = "Бесид";
+		partOne[24] = "Хаге";
+		partOne[25] = "Цунполь";
+		partOne[26] = "Дерайтер";
+		partOne[27] = "Саван";
+		partOne[28] = "Пейсидон";
+		partOne[29] = "Мосвад";
+		partOne[30] = "Фифи";
+		partOne[31] = "Серфиген";
+		partOne[32] = "Сервеган";
+		partOne[33] = "Луни";
+		partOne[34] = "Джикполь";
+		partOne[35] = "Квин";
+		partOne[36] = "Рой";
+		partOne[37] = "Десе";
+		partOne[38] = "Верти";
+		partOne[39] = "Водсаф";
+		partOne[40] = "Ланеп";
+
+		String[] partTwo;
+		partTwo = new String[41];
+		partTwo[0] = "пил";
+		partTwo[1] = "ренайт";
+		partTwo[2] = "ра";
+		partTwo[3] = "хун";
+		partTwo[4] = "десвер";
+		partTwo[5] = "сертоплак";
+		partTwo[6] = "вертино";
+		partTwo[7] = "калап";
+		partTwo[8] = "джани";
+		partTwo[9] = "нипфит";
+		partTwo[10] = "арагиппо";
+		partTwo[11] = "гафваб";
+		partTwo[12] = "килор";
+		partTwo[13] = "занио";
+		partTwo[14] = "васио";
+		partTwo[15] = "слин";
+		partTwo[16] = "тил";
+		partTwo[17] = "хустил";
+		partTwo[18] = "лисдо";
+		partTwo[19] = "весдон";
+		partTwo[20] = "верджин";
+		partTwo[21] = "крион";
+		partTwo[22] = "кит";
+		partTwo[23] = "макс";
+		partTwo[24] = "волк";
+		partTwo[25] = "заредо";
+		partTwo[26] = "кибило";
+		partTwo[27] = "вемеп";
+		partTwo[28] = "йетер";
+		partTwo[29] = "вилькан";
+		partTwo[30] = "ликасио";
+		partTwo[31] = "дил";
+		partTwo[32] = "лин";
+		partTwo[33] = "сверн";
+		partTwo[34] = "илип";
+		partTwo[35] = "хасад";
+		partTwo[36] = "серион";
+		partTwo[37] = "саверн";
+		partTwo[38] = "тероп";
+		partTwo[39] = "санио";
+		partTwo[40] = "пилион";
 	}
 
 	public int getNumber() {
 		return number;
 	}
 
-	public void setNumber(int number) {
-		this.number = number;
-	}
-
 	public String getNamePerson() {
 		return this.namePerson;
-	}
-
-	public void setNamePerson(String namePerson) {
-		this.namePerson = namePerson;
 	}
 
 	public Task createTask() {
 
 		Task newPizza = new Task(this);
 
-		newPizza.setSize(randomInt(10) + 1);
+		newPizza.setSize(randomIn.nextInt(10) + 1);
 
 		List<Ingredient> component = new ArrayList<>();
 
-		component.add(new Ingredient("сыр", randomInt(10)));
-		component.add(new Ingredient("колбаса", randomInt(10)));
-		component.add(new Ingredient("перец", randomInt(10)));
+		component.add(new Ingredient("сыр", randomIn.nextInt(10)));
+		component.add(new Ingredient("колбаса", randomIn.nextInt(10)));
+		component.add(new Ingredient("перец", randomIn.nextInt(10)));
 
 		newPizza.setListIngredients(component);
 
@@ -49,105 +131,10 @@ public class Person {
 	}
 
 	// ----------------------------------Random--------------------------------------------
-	public int randomInt(int upTo) {
-		int number = 0;
-		number = randomIn.nextInt(upTo);
-		return number;
-	}
-
-	public String randomName() {
-		String[] w3;
-		w3 = new String[41];
-		w3[0] = "Арт";
-		w3[1] = "Фолл";
-		w3[2] = "Ка";
-		w3[3] = "Миу";
-		w3[4] = "Бик";
-		w3[5] = "Мик";
-		w3[6] = "Синд";
-		w3[7] = "Воль";
-		w3[8] = "Рей";
-		w3[9] = "Хал";
-		w3[10] = "Роб";
-		w3[11] = "Тимм";
-		w3[12] = "Бокас";
-		w3[13] = "Асило";
-		w3[14] = "Зорт";
-		w3[15] = "Ногли";
-		w3[16] = "Седи";
-		w3[17] = "Верполь";
-		w3[18] = "Динреп";
-		w3[19] = "Гольд";
-		w3[20] = "Шайн";
-		w3[21] = "Каплон";
-		w3[22] = "Верило";
-		w3[23] = "Бесид";
-		w3[24] = "Хаге";
-		w3[25] = "Цунполь";
-		w3[26] = "Дерайтер";
-		w3[27] = "Саван";
-		w3[28] = "Пейсидон";
-		w3[29] = "Мосвад";
-		w3[30] = "Фифи";
-		w3[31] = "Серфиген";
-		w3[32] = "Сервеган";
-		w3[33] = "Луни";
-		w3[34] = "Джикполь";
-		w3[35] = "Квин";
-		w3[36] = "Рой";
-		w3[37] = "Десе";
-		w3[38] = "Верти";
-		w3[39] = "Водсаф";
-		w3[40] = "Ланеп";
-
-		String[] w4;
-		w4 = new String[41];
-		w4[0] = "пил";
-		w4[1] = "ренайт";
-		w4[2] = "ра";
-		w4[3] = "хун";
-		w4[4] = "десвер";
-		w4[5] = "сертоплак";
-		w4[6] = "вертино";
-		w4[7] = "калап";
-		w4[8] = "джани";
-		w4[9] = "нипфит";
-		w4[10] = "арагиппо";
-		w4[11] = "гафваб";
-		w4[12] = "килор";
-		w4[13] = "занио";
-		w4[14] = "васио";
-		w4[15] = "слин";
-		w4[16] = "тил";
-		w4[17] = "хустил";
-		w4[18] = "лисдо";
-		w4[19] = "весдон";
-		w4[20] = "верджин";
-		w4[21] = "крион";
-		w4[22] = "кит";
-		w4[23] = "макс";
-		w4[24] = "волк";
-		w4[25] = "заредо";
-		w4[26] = "кибило";
-		w4[27] = "вемеп";
-		w4[28] = "йетер";
-		w4[29] = "вилькан";
-		w4[30] = "ликасио";
-		w4[31] = "дил";
-		w4[32] = "лин";
-		w4[33] = "сверн";
-		w4[34] = "илип";
-		w4[35] = "хасад";
-		w4[36] = "серион";
-		w4[37] = "саверн";
-		w4[38] = "тероп";
-		w4[39] = "санио";
-		w4[40] = "пилион";
-
+	private String randomName() {
 		StringBuilder msg = new StringBuilder();
-		msg.append(w3[this.randomInt(40)]);
-		msg.append(w4[this.randomInt(40)]);
-
+		msg.append(partOne[randomIn.nextInt(partOne.length)]);
+		msg.append(partTwo[randomIn.nextInt(partTwo.length)]);
 		return msg.toString();
 	}
 }

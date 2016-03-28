@@ -12,11 +12,11 @@ import org.printing_module.Task;
 
 public class TestJdbc {
 	private static final String DB_SERVER_NAME = "localhost";
-	private static final int    DB_PORT = 5432;
+	private static final int DB_PORT = 5432;
 	private static final String DB_NAME = "test";
 	private static final String DB_USER = "postgres";
 	private static final String DB_PASSWORD = "12345678";
-	
+
 	private static final String SELECT_COUNT_STORAGE = "select count(*) from storage";
 	private static final String INSERT_STORAGE = "INSERT INTO storage (id, id_ingr, number_ingr) VALUES (?, ?, ?)";
 	private static final String SELECT_INGREDIENT_STORAGE = "SELECT name, number_ingr FROM storage,ingredient_dict where storage.id_ingr = ingredient_dict.id and name = ?";
@@ -39,12 +39,12 @@ public class TestJdbc {
 		}
 		return count;
 	}
-	
+
 	/**
 	 * транзакция "добавление ингридиентов на склад"
 	 **/
 	public void insertStorage(Connection conn) {
-		try (PreparedStatement prepStateInsertStorage = conn.prepareStatement(INSERT_STORAGE)){
+		try (PreparedStatement prepStateInsertStorage = conn.prepareStatement(INSERT_STORAGE)) {
 			for (int i = 1; i < 4; i++) {
 				prepStateInsertStorage.setInt(1, i);
 				prepStateInsertStorage.setInt(2, i);
@@ -59,7 +59,7 @@ public class TestJdbc {
 			} catch (SQLException er) {
 				System.err.println("Ошибка при добавлении ингридиентов на склад(откат транзакции): " + er);
 			}
-		} 
+		}
 	}
 
 	/**
@@ -74,38 +74,40 @@ public class TestJdbc {
 					ingrNumberStorage = resultSelect.getInt("number_ingr");
 				}
 			} catch (SQLException esr) {
-				System.err.println("Ошибка в получении количества ингридиентов со склада(в получении результатов): " + esr);
+				System.err.println(
+						"Ошибка в получении количества ингридиентов со склада(в получении результатов): " + esr);
 			}
 		} catch (SQLException ep) {
 			System.err.println("Ошибка в получении количества ингридиентов со склада: " + ep);
 		}
 		return ingrNumberStorage;
 	}
-	
+
 	/**
 	 * проверка "есть ли готовые пиццы в списке"
 	 **/
 	public int selectPizza(Connection conn) {
 		int max = 0;
-		try (Statement selectMaxStatement  = conn.createStatement();
-				ResultSet selectMaxResult = selectMaxStatement.executeQuery(SELECT_MAX_PIZZA)){
-			
+		try (Statement selectMaxStatement = conn.createStatement();
+				ResultSet selectMaxResult = selectMaxStatement.executeQuery(SELECT_MAX_PIZZA)) {
+
 			while (selectMaxResult.next()) {
 				max = selectMaxResult.getInt("MAX");
 			}
 		} catch (SQLException es) {
 			System.err.println("Ошибка при проверке списка готовых пицц: " + es);
-		} 
+		}
 		return max;
 	}
-	
+
 	/**
-	 * транзакция "добавление пиццы в список готовых и вычитании ингридиентов со склада"
+	 * транзакция
+	 * "добавление пиццы в список готовых и вычитании ингридиентов со склада"
 	 **/
-	public void insertPizzaUpdateStorage(Connection conn, Task newTask, int nextNumber) {	
+	public void insertPizzaUpdateStorage(Connection conn, Task newTask, int nextNumber) {
 		System.out.println("Забираем игридиенты для приготовления пиццы");
 		try (PreparedStatement prepStateInsertPizza = conn.prepareStatement(INSERT_PIZZA);
-				PreparedStatement prepStateUpdateStorage = conn.prepareStatement(UPDATE_STORAGE)){
+				PreparedStatement prepStateUpdateStorage = conn.prepareStatement(UPDATE_STORAGE)) {
 
 			for (int p = 0; p < newTask.getListIngredients().size(); p++) {
 				String ingrName = newTask.getListIngredients().get(p).getName();
@@ -123,15 +125,18 @@ public class TestJdbc {
 			}
 			conn.commit();
 		} catch (SQLException e) {
-			System.err.println("Ошибка при добавлении пиццы в список готовых или вычитании ингридиентов со склада: "+ e);
+			System.err
+					.println("Ошибка при добавлении пиццы в список готовых или вычитании ингридиентов со склада: " + e);
 			try {
 				conn.rollback();
 			} catch (SQLException er) {
-				System.err.println("Ошибка при добавлении пиццы в список готовых или вычитании ингридиентов со склада(откат транзакции): "+ er);
+				System.err.println(
+						"Ошибка при добавлении пиццы в список готовых или вычитании ингридиентов со склада(откат транзакции): "
+								+ er);
 			}
-		} 
+		}
 	}
-		
+
 	public static void main(String[] args) {
 		TestJdbc app = new TestJdbc();
 
@@ -168,7 +173,7 @@ public class TestJdbc {
 				String ingrName = newTask.getListIngredients().get(q).getName();
 				int ingrNumber = newTask.getListIngredients().get(q).getNumber();
 
-				if (app.selectIngredient(connection,ingrName) < ingrNumber) {
+				if (app.selectIngredient(connection, ingrName) < ingrNumber) {
 					System.err.println("Ошибка: недостаточно ингридиента: \"" + ingrName + "\" для обработки заказа");
 					flagError = true;
 					break;
@@ -179,15 +184,15 @@ public class TestJdbc {
 				return;
 			}
 			int nextNumber = app.selectPizza(connection);
-			
+
 			if (nextNumber == 0) {
 				nextNumber = 1;
 			} else {
 				nextNumber = nextNumber + 1;
 			}
-			
+
 			connection.setAutoCommit(false);
-			app.insertPizzaUpdateStorage(connection, newTask, nextNumber);		
+			app.insertPizzaUpdateStorage(connection, newTask, nextNumber);
 			connection.setAutoCommit(true);
 
 			System.out.println("Пицца готова");
