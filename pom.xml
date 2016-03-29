@@ -21,6 +21,7 @@
     <module>console_app</module>
     <module>thread_release</module>
     <module>jdbc_release</module>
+    <module>jpa_release</module>
   </modules>
   
   <build>
