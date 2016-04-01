@@ -34,13 +34,11 @@ public class KitchenerRunnable implements Runnable {
 
 			if (cookQueue.checkStockIngredients(next) == false) {
 				cookQueue.minusIngredients(next);
-
 				try {
 					Thread.sleep(this.cookTime);
 				} catch (InterruptedException e) {
 					System.err.println("Ошибка sleep KitchenerRunnable(приготовления заказа): " + e);
 				}
-
 				System.out.println("Порядковый номер заказа: " + (k + 1) + ". Заказ готов");
 			}
 

@@ -137,6 +137,9 @@ public class TestJdbc {
 		}
 	}
 
+	/**
+	 * проверка "достаточно ли ингридиентов на склада для обработки заказа"
+	 **/
 	public boolean checkIngrNumber(Connection conn, Task newTask) {
 		System.out.println("Проверям наличие ингридиентов на складе");
 		for (int q = 0; q < newTask.getListIngredients().size(); q++) {

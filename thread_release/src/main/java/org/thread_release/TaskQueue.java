@@ -18,7 +18,7 @@ public class TaskQueue {
 	public TaskQueue(Storage newStorage) {
 		this.newStorage = newStorage;
 	}
-
+	
 	public Task next() {
 		Task tmpTask;
 		lock.lock();
@@ -28,12 +28,21 @@ public class TaskQueue {
 			}
 			tmpTask = tasks.get(0);
 			tasks.remove(0);
+			
 			return tmpTask;
 		} finally {
 			lock.unlock();
 		}
 	}
 
+	/*
+	* Поступил заказ № 1 от Рейверджин(Пицца размером: 8. Состоящая из: сыр - 5, колбаса - 7, перец - 1)
+	* очередь заказов:  клиент № 2 - Рейверджин 
+    * На складе осталось: сыр - 100, колбаса - 100, перец - 100
+    * Немного был откорректирован вывод
+    * например здесь Рейверджин это один и тот же человек, 
+    * заказ из очереди забирается не моментально, а с небольшой задержкой
+	*/
 	public void put(Task task) {
 		lock.lock();
 		try {
@@ -45,16 +54,33 @@ public class TaskQueue {
 			StringBuilder tmpString = new StringBuilder();
 			if (tasks.size() > 0) {
 				for (int i = 0; i < tasks.size(); i++) {
-					tmpString.append(" № " + tasks.get(i).getClient().getNumber() + " - "
+					tmpString.append(" клиент № " + tasks.get(i).getClient().getNumber() + " - "
 							+ tasks.get(i).getClient().getNamePerson() + " ");
 				}
 				System.out.println("очередь заказов: " + tmpString.toString());
 			}
-			System.out.println("На складе осталось: " + newStorage.printListComponent());
+			System.out.println(newStorage.printListComponent());
+			System.out.println();
 		} finally {
 			lock.unlock();
 		}
 	}
+	
+/*	- поступил заказ №1 от клиента №1 (состав:…); очередь заказов:…,склад:...
+
+	- поступил заказ №2 от клиента №3 (состав:…); очередь заказов:…,склад:...
+
+	- поступил заказ №3 от клиента №5 (состав:…); очередь заказов:…,склад:...
+
+	- заказ №1 готов.
+
+	- поступил заказ №4 от клиента №2 (состав:…); очередь заказов:…,склад:...
+
+	- поступил заказ №5 от клиента №1 (состав:…); очередь заказов:…,склад:...
+
+	- заказ №2 готов.
+
+	- заказ №3 готов.*/
 
 	public int size() {
 		int format;
@@ -78,11 +104,13 @@ public class TaskQueue {
 		return tmpTask;
 	}
 	
-	/**
-	 * 
-	 * @param next
-	 * @return
-	 */
+	/*
+	* так как к "складу" нужен доступ из "клиента"(по заданию),
+	* а "повар" тоже должен работать со складом,
+	* то нужно использовать общую блокировку,
+	* поэтому checkStockIngredients() и minusIngredients()
+	* переносятся в очередь
+	*/
 	public boolean checkStockIngredients(Task next) {
 		lock.lock();
 		try {
@@ -105,11 +133,6 @@ public class TaskQueue {
 		return false;
 	}
 
-	/**
-	 * 
-	 * @param next
-	 * @return
-	 */
 	public void minusIngredients(Task next) {
 		lock.lock();
 		try {
@@ -124,6 +147,10 @@ public class TaskQueue {
 				tempList.get(n).setNumber(this.newStorage.getCountByName(ingrName) - ingrNumber);
 				this.newStorage.setListComponent(tempList);
 			}
+			
+			System.out.println("Повар забрал на приготовление заказ № " + this.globalSize);
+			System.out.println();
+			
 		} finally {
 			lock.unlock();
 		}
