@@ -12,7 +12,9 @@ import org.printing_module.Task;
 public class TaskQueue {
 	private Lock lock = new ReentrantLock();
 	private final List<Task> tasks = new LinkedList<>();
-	private int globalSize = 0;
+	
+	private int maxElem = 0;
+	private int currentElem = 0;
 	private Storage newStorage;
 
 	public TaskQueue(Storage newStorage) {
@@ -28,6 +30,7 @@ public class TaskQueue {
 			}
 			tmpTask = tasks.get(0);
 			tasks.remove(0);
+			currentElem++;
 			
 			return tmpTask;
 		} finally {
@@ -42,20 +45,24 @@ public class TaskQueue {
     * Немного был откорректирован вывод
     * например здесь Рейверджин это один и тот же человек, 
     * заказ из очереди забирается не моментально, а с небольшой задержкой
+    * клиент № 2 - это номер потока
 	*/
 	public void put(Task task) {
 		lock.lock();
 		try {
 			tasks.add(task);
-			globalSize++;
+			maxElem++;
 
-			System.out.println("Поступил заказ № " + this.globalSize + " от " + task.getClient().getNamePerson() + "("
+			System.out.println("Поступил заказ № " + this.maxElem + " от " + task.getClient().getNamePerson() + "("
 					+ task.printTask() + ")");
 			StringBuilder tmpString = new StringBuilder();
 			if (tasks.size() > 0) {
 				for (int i = 0; i < tasks.size(); i++) {
-					tmpString.append(" клиент № " + tasks.get(i).getClient().getNumber() + " - "
-							+ tasks.get(i).getClient().getNamePerson() + " ");
+					tmpString.append("клиент № " + tasks.get(i).getClient().getNumber() + " - "
+							+ tasks.get(i).getClient().getNamePerson());
+					if (i + 1 < tasks.size()) {
+						tmpString.append(", ");
+					}
 				}
 				System.out.println("очередь заказов: " + tmpString.toString());
 			}
@@ -66,22 +73,6 @@ public class TaskQueue {
 		}
 	}
 	
-/*	- поступил заказ №1 от клиента №1 (состав:…); очередь заказов:…,склад:...
-
-	- поступил заказ №2 от клиента №3 (состав:…); очередь заказов:…,склад:...
-
-	- поступил заказ №3 от клиента №5 (состав:…); очередь заказов:…,склад:...
-
-	- заказ №1 готов.
-
-	- поступил заказ №4 от клиента №2 (состав:…); очередь заказов:…,склад:...
-
-	- поступил заказ №5 от клиента №1 (состав:…); очередь заказов:…,склад:...
-
-	- заказ №2 готов.
-
-	- заказ №3 готов.*/
-
 	public int size() {
 		int format;
 		lock.lock();
@@ -123,7 +114,7 @@ public class TaskQueue {
 				int ingrNumberStorage = this.newStorage.getCountByName(ingrName);
 
 				if (ingrNumberStorage < ingrNumber) {
-					System.err.println("Ошибка: недостатоно ингридиентов для обработки заказа");
+					System.err.println("Ошибка: недостатоно ингридиентов для обработки заказа "+ this.currentElem);
 					return true;
 				}
 			}
@@ -148,7 +139,7 @@ public class TaskQueue {
 				this.newStorage.setListComponent(tempList);
 			}
 			
-			System.out.println("Повар забрал на приготовление заказ № " + this.globalSize);
+			System.out.println("Повар забрал на приготовление заказ № " + this.currentElem);
 			System.out.println();
 			
 		} finally {

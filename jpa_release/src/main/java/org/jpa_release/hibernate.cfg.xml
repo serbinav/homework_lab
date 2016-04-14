@@ -10,8 +10,13 @@
         <property name="hibernate.connection.username">postgres</property>
         <property name="hibernate.connection.password">12345678</property>
         <property name="connection.characterEncoding">UTF-8</property>
+        <property name="hibernate.connection.autocommit">true</property>
         <property name="show_sql">true</property> 
         <property name="hbm2ddl.auto">update</property>
+        
         <mapping class="org.jpa_release.EmployeeEntity"></mapping>
+        <mapping class="org.jpa_release.IngredientDictEntity"></mapping>
+        <mapping class="org.jpa_release.StorageEntity"></mapping>
+        <mapping class="org.jpa_release.PizzaEntity"></mapping>
     </session-factory>
 </hibernate-configuration>

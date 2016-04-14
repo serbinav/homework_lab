@@ -1,38 +1,47 @@
 package org.jpa_release;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+//OK
+/*CREATE TABLE ingredient_dict
+(
+  id integer NOT NULL,
+  name character varying(200),
+  CONSTRAINT id_ingr PRIMARY KEY (id)
+)*/
 
 @Entity
-@Table(name = "ingredient_dict")
+@Table(name = "ingredient_dict", uniqueConstraints = { 
+        @UniqueConstraint(columnNames = "id")})
 public class IngredientDictEntity implements Serializable{
 
 	private static final long serialVersionUID = -1414224003598485749L;
 
 	@Id
-	@Column(name = "id", nullable = false)
-	@OneToMany(fetch = FetchType.EAGER)
-	private int id;
-	// CONSTRAINT id_ingr PRIMARY KEY (id)
+	@Column(name = "id", unique = true, nullable = false)
+	private Integer id;
 
 	@Column(name = "name", length = 200)
 	private String name;
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public long getId() {
-		return id;
 	}
 }

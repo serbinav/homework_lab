@@ -12,6 +12,16 @@ import javax.persistence.UniqueConstraint;
  
 import org.hibernate.annotations.OptimisticLockType; 
  
+/*CREATE TABLE employee
+(
+  id serial NOT NULL,
+  email character varying(100) NOT NULL,
+  first_name character varying(100) NOT NULL,
+  last_name character varying(100) NOT NULL,
+  CONSTRAINT employee_pkey PRIMARY KEY (id),
+  CONSTRAINT employee_email_key UNIQUE (email)
+)*/
+
 @Entity 
 @org.hibernate.annotations.Entity(optimisticLock = OptimisticLockType.ALL,dynamicUpdate = true ) 
 @Table(name = "Employee", uniqueConstraints = { 

@@ -1,0 +1,325 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.4.4
+-- Dumped by pg_dump version 9.4.0
+-- Started on 2016-04-13 18:24:26
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+DROP DATABASE test;
+--
+-- TOC entry 2022 (class 1262 OID 16795)
+-- Name: test; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE test WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Russian_Russia.1251' LC_CTYPE = 'Russian_Russia.1251';
+
+
+ALTER DATABASE test OWNER TO postgres;
+
+\connect test
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 6 (class 2615 OID 2200)
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA public;
+
+
+ALTER SCHEMA public OWNER TO postgres;
+
+--
+-- TOC entry 2023 (class 0 OID 0)
+-- Dependencies: 6
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+
+
+--
+-- TOC entry 178 (class 3079 OID 11855)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2025 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 172 (class 1259 OID 16829)
+-- Name: ingredient_dict; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE ingredient_dict (
+    id integer NOT NULL,
+    name character varying(200)
+);
+
+
+ALTER TABLE ingredient_dict OWNER TO postgres;
+
+--
+-- TOC entry 173 (class 1259 OID 16832)
+-- Name: ingredient_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE ingredient_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE ingredient_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2026 (class 0 OID 0)
+-- Dependencies: 173
+-- Name: ingredient_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE ingredient_id_seq OWNED BY ingredient_dict.id;
+
+
+--
+-- TOC entry 174 (class 1259 OID 16834)
+-- Name: pizza; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE pizza (
+    id integer NOT NULL,
+    id_pizza integer NOT NULL,
+    size smallint NOT NULL,
+    id_ingr integer,
+    number_ingr integer
+);
+
+
+ALTER TABLE pizza OWNER TO postgres;
+
+--
+-- TOC entry 175 (class 1259 OID 16837)
+-- Name: pizza_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE pizza_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE pizza_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2027 (class 0 OID 0)
+-- Dependencies: 175
+-- Name: pizza_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE pizza_id_seq OWNED BY pizza.id;
+
+
+--
+-- TOC entry 176 (class 1259 OID 16839)
+-- Name: storage; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE storage (
+    id integer NOT NULL,
+    id_ingr integer,
+    number_ingr integer
+);
+
+
+ALTER TABLE storage OWNER TO postgres;
+
+--
+-- TOC entry 177 (class 1259 OID 16842)
+-- Name: storage_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE storage_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE storage_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2028 (class 0 OID 0)
+-- Dependencies: 177
+-- Name: storage_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE storage_id_seq OWNED BY storage.id;
+
+
+--
+-- TOC entry 1893 (class 2604 OID 16844)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY pizza ALTER COLUMN id SET DEFAULT nextval('pizza_id_seq'::regclass);
+
+
+--
+-- TOC entry 1894 (class 2604 OID 16845)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY storage ALTER COLUMN id SET DEFAULT nextval('storage_id_seq'::regclass);
+
+
+--
+-- TOC entry 2012 (class 0 OID 16829)
+-- Dependencies: 172
+-- Data for Name: ingredient_dict; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO ingredient_dict (id, name) VALUES (1, 'сыр');
+INSERT INTO ingredient_dict (id, name) VALUES (2, 'колбаса');
+INSERT INTO ingredient_dict (id, name) VALUES (3, 'перец');
+
+
+--
+-- TOC entry 2029 (class 0 OID 0)
+-- Dependencies: 173
+-- Name: ingredient_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('ingredient_id_seq', 9, true);
+
+
+--
+-- TOC entry 2014 (class 0 OID 16834)
+-- Dependencies: 174
+-- Data for Name: pizza; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 2030 (class 0 OID 0)
+-- Dependencies: 175
+-- Name: pizza_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('pizza_id_seq', 1, false);
+
+
+--
+-- TOC entry 2016 (class 0 OID 16839)
+-- Dependencies: 176
+-- Data for Name: storage; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 2031 (class 0 OID 0)
+-- Dependencies: 177
+-- Name: storage_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('storage_id_seq', 1, false);
+
+
+--
+-- TOC entry 1896 (class 2606 OID 16847)
+-- Name: id_ingr; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY ingredient_dict
+    ADD CONSTRAINT id_ingr PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1898 (class 2606 OID 16849)
+-- Name: id_pizza; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY pizza
+    ADD CONSTRAINT id_pizza PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1900 (class 2606 OID 16851)
+-- Name: id_stor; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY storage
+    ADD CONSTRAINT id_stor PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1902 (class 2606 OID 16852)
+-- Name: id_ingr; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY storage
+    ADD CONSTRAINT id_ingr FOREIGN KEY (id_ingr) REFERENCES ingredient_dict(id);
+
+
+--
+-- TOC entry 1901 (class 2606 OID 16857)
+-- Name: id_ingr; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY pizza
+    ADD CONSTRAINT id_ingr FOREIGN KEY (id_ingr) REFERENCES ingredient_dict(id);
+
+
+--
+-- TOC entry 2024 (class 0 OID 0)
+-- Dependencies: 6
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2016-04-13 18:24:26
+
+--
+-- PostgreSQL database dump complete
+--
+

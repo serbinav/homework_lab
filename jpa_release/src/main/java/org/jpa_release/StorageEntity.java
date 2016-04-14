@@ -1,58 +1,66 @@
 package org.jpa_release;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.OptimisticLockType;
+
+//OK BAD NAME
+/*CREATE TABLE storage
+(
+  id serial NOT NULL,
+  id_ingr integer,
+  number_ingr integer,
+  CONSTRAINT id_stor PRIMARY KEY (id),
+  CONSTRAINT id_ingr FOREIGN KEY (id_ingr)
+      REFERENCES ingredient_dict (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)*/
 
 @Entity
-@Table
+/*@NamedQueries({ 
+	@NamedQuery(name="StorageEntity.selectIngredientStorage", 
+			query="SELECT s FROM StorageEntity s, PizzaEntity p WHERE s.idingr_id = p.idingr_id "), 
+})*/ 
+@org.hibernate.annotations.Entity(optimisticLock = OptimisticLockType.ALL, dynamicUpdate = true ) 
+@Table(name = "storage", uniqueConstraints = { 
+        @UniqueConstraint(columnNames = "id")})
 public class StorageEntity implements Serializable {
 
 	private static final long serialVersionUID = -6768626086597040657L;
 
 	@Id
-	@Column(name = "id", nullable = false)
-	private int id;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@ManyToMany(fetch = FetchType.EAGER)
-	
-	// 	  CONSTRAINT id_stor PRIMARY KEY (id),
-	//	  CONSTRAINT id_ingr FOREIGN KEY (id_ingr)
-	//	  REFERENCES ingredient_dict (id) MATCH SIMPLE
-	//	  ON UPDATE NO ACTION ON DELETE NO ACTION
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+	@Column(name = "id", unique = true, nullable = false)
+	private Integer id;
 
-	@Column(name = "id_ingr")
-	@OneToMany(fetch = FetchType.EAGER)
-	private int idIngr;
+	@OneToOne(fetch = FetchType.EAGER )
+	private IngredientDictEntity idIngr;
 	
 	@Column(name = "number_ingr")
-	private int numberIngr;
+	private Integer numberIngr;
 
-	public int getIdIngr() {
+	public IngredientDictEntity getIdIngr() {
 		return idIngr;
 	}
 
-	public void setIdIngr(int idIngr) {
+	public void setIdIngr(IngredientDictEntity idIngr) {
 		this.idIngr = idIngr;
 	}
 	
-	public int getNumberIngr() {
+	public Integer getNumberIngr() {
 		return numberIngr;
 	}
 
-	public void setNumberIngr(int numberIngr) {
+	public void setNumberIngr(Integer numberIngr) {
 		this.numberIngr = numberIngr;
-	}
-
-	public long getId() {
-		return id;
 	}
 }

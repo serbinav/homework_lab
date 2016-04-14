@@ -1,74 +1,87 @@
 package org.jpa_release;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.OptimisticLockType;
+
+//OK BAD NAME
+/*CREATE TABLE pizza
+(
+  id serial NOT NULL,
+  id_pizza integer NOT NULL,
+  size smallint NOT NULL,
+  id_ingr integer,
+  number_ingr integer,
+  CONSTRAINT id_pizza PRIMARY KEY (id),
+  CONSTRAINT id_ingr FOREIGN KEY (id_ingr)
+      REFERENCES ingredient_dict (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)*/
 
 @Entity
-@Table
+@org.hibernate.annotations.Entity(optimisticLock = OptimisticLockType.ALL, dynamicUpdate = true ) 
+@Table(name = "pizza", uniqueConstraints = { 
+        @UniqueConstraint(columnNames = "id")})
 public class PizzaEntity implements Serializable {
 
 	private static final long serialVersionUID = 4930564783604224701L;
 
 	@Id
-	@Column(name = "id", nullable = false)
-	private int id;
-	// 	  CONSTRAINT id_pizza PRIMARY KEY (id),
-	// 	  CONSTRAINT id_ingr FOREIGN KEY (id_ingr)
-	// 	  REFERENCES ingredient_dict (id) MATCH SIMPLE
-	// 	  ON UPDATE NO ACTION ON DELETE NO ACTION
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+	@Column(name = "id", unique = true, nullable = false)
+	private Integer id;
 
 	@Column(name = "id_pizza", nullable = false)
-	private int idPizza;
+	private Integer idPizza;
 	
+	//short
 	@Column(name = "size", nullable = false)
-	private short size;
+	private Integer size;
 	
-	@Column(name = "id_ingr")
-	@OneToMany(fetch = FetchType.EAGER)
-	private int idIngr;
+	@OneToOne(fetch = FetchType.EAGER)
+	private IngredientDictEntity idIngr;
 	
 	@Column(name = "number_ingr")
-	private int numberIngr;
+	private Integer numberIngr;
 	
-	public int getIdPizza() {
+	public Integer getIdPizza() {
 		return idPizza;
 	}
 
-	public void setIdPizza(int idPizza) {
+	public void setIdPizza(Integer idPizza) {
 		this.idPizza = idPizza;
 	}
 	
-	public short getSize() {
+	public Integer getSize() {
 		return size;
 	}
 
-	public void setSize(short size) {
+	public void setSize(Integer size) {
 		this.size = size;
 	}
 
-	public int getIdIngr() {
+	public IngredientDictEntity getIdIngr() {
 		return idIngr;
 	}
 
-	public void setIdIngr(int idIngr) {
+	public void setIdIngr(IngredientDictEntity idIngr) {
 		this.idIngr = idIngr;
 	}
 	
-	public int getNumberIngr() {
+	public Integer getNumberIngr() {
 		return numberIngr;
 	}
 
-	public void setNumberIngr(int numberIngr) {
+	public void setNumberIngr(Integer numberIngr) {
 		this.numberIngr = numberIngr;
-	}
-
-	public long getId() {
-		return id;
 	}
 }
