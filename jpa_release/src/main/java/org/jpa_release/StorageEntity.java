@@ -7,11 +7,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-
-import org.hibernate.annotations.OptimisticLockType;
 
 //OK BAD NAME
 /*CREATE TABLE storage
@@ -26,19 +26,21 @@ import org.hibernate.annotations.OptimisticLockType;
 )*/
 
 @Entity
-/*@NamedQueries({ 
-	@NamedQuery(name="StorageEntity.selectIngredientStorage", 
-			query="SELECT s FROM StorageEntity s, PizzaEntity p WHERE s.idingr_id = p.idingr_id "), 
-})*/ 
-@org.hibernate.annotations.Entity(optimisticLock = OptimisticLockType.ALL, dynamicUpdate = true ) 
+//@org.hibernate.annotations.Entity(optimisticLock = OptimisticLockType.ALL, dynamicUpdate = true ) 
 @Table(name = "storage", uniqueConstraints = { 
         @UniqueConstraint(columnNames = "id")})
+
+@NamedQueries({ 
+	@NamedQuery(name = "StorageEntity.findByName", query = "SELECT s FROM StorageEntity s, IngredientDictEntity i WHERE s.idIngr = i.id and i.name = :name"),
+	@NamedQuery(name = "StorageEntity.getCount", query = "SELECT count(s) FROM StorageEntity s")
+//	@NamedQuery(name = "StorageEntity.getAll", query = "SELECT s FROM StorageEntity s")
+}) 
 public class StorageEntity implements Serializable {
 
 	private static final long serialVersionUID = -6768626086597040657L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // strategy = GenerationType.AUTO
 	@Column(name = "id", unique = true, nullable = false)
 	private Integer id;
 
@@ -47,7 +49,7 @@ public class StorageEntity implements Serializable {
 	
 	@Column(name = "number_ingr")
 	private Integer numberIngr;
-
+	
 	public IngredientDictEntity getIdIngr() {
 		return idIngr;
 	}
@@ -62,5 +64,9 @@ public class StorageEntity implements Serializable {
 
 	public void setNumberIngr(Integer numberIngr) {
 		this.numberIngr = numberIngr;
+	}
+	
+	public Integer getId() {
+		return id;
 	}
 }

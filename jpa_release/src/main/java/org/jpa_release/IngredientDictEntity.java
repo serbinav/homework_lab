@@ -4,6 +4,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -18,6 +20,10 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "ingredient_dict", uniqueConstraints = { 
         @UniqueConstraint(columnNames = "id")})
+
+@NamedQueries({ 
+	@NamedQuery(name = "IngredientDictEntity.findByName", query = "SELECT i FROM IngredientDictEntity i WHERE i.name = :name")
+}) 
 public class IngredientDictEntity implements Serializable{
 
 	private static final long serialVersionUID = -1414224003598485749L;
@@ -29,10 +35,6 @@ public class IngredientDictEntity implements Serializable{
 	@Column(name = "name", length = 200)
 	private String name;
 
-	public Integer getId() {
-		return id;
-	}
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -43,5 +45,9 @@ public class IngredientDictEntity implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public Integer getId() {
+		return id;
 	}
 }
