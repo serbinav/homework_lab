@@ -13,17 +13,6 @@ import org.printing_module.Task;
  
 public class TestServiceJpa {
  
-/*	@Test
-    public void testGetAll(){
-
-        List<StorageEntity> cars = service.getAll();
-        
-        for(StorageEntity c : cars){
-            System.out.println(c);
-        }
-    }
-*/
-	
 	@Test
     public void testAll() {
     	StorageService serviceStorage = new StorageService();
@@ -76,7 +65,8 @@ public class TestServiceJpa {
 
         piz1 = servicePizza.add(piz1);  
     }	
-	
+//****************************************************************************************
+
 	// ок
 	public long selectStorage(StorageService serviceStorage) {
 		long count = 0;
@@ -89,7 +79,7 @@ public class TestServiceJpa {
 		return count;
 	}
 		
-	// ок
+Ошибка при проверке списка готовых пицц: java.lang.NullPointerException;
 	public int selectPizza(PizzaService servicePizza) {
 		int max = 0;
 		try {
@@ -114,8 +104,7 @@ public class TestServiceJpa {
 		return ingrNumberStorage;
 	}
 
-// ???
-// нужно проверить
+Нужно проверить;
 	public void insertStorage(StorageService serviceStorage) {
 		try {
 			for (int i = 1; i < 4; i++) {
@@ -132,7 +121,6 @@ public class TestServiceJpa {
 			System.err.println("Ошибка при добавлении ингридиентов на склад: " + e);
 		}
 	}
-	//----------------------------------------------------------------------------------------
 
 	public void insertPizzaUpdateStorage(IngredientDictService ingredientService, PizzaService servicePizza , StorageService serviceStorage, Task newTask, int nextNumber) {
 		System.out.println("Забираем игридиенты для приготовления пиццы");
@@ -154,7 +142,7 @@ public class TestServiceJpa {
 		    
 				//update Storage
 		        StorageEntity storFromDB = serviceStorage.findByName(ingrName);
-		        storFromDB.setNumberIngr(ingrNumber);
+		        storFromDB.setNumberIngr(storFromDB.getNumberIngr() - ingrNumber);
 		        serviceStorage.update(storFromDB);
 			}
 			
@@ -178,12 +166,11 @@ public class TestServiceJpa {
 		return false;
 	}
 	
-	//----------------------------------------------------------------------------------------
-
+//----------------------------------------------------------------------------------------
 	public static void main(String[] args) {
 		TestServiceJpa app = new TestServiceJpa();
 		
-		IngredientDictService ingredientService= new IngredientDictService();
+		IngredientDictService ingredientService = new IngredientDictService();
     	PizzaService servicePizza = new PizzaService();
     	StorageService serviceStorage = new StorageService();
 
@@ -213,7 +200,7 @@ public class TestServiceJpa {
 				nextNumber = nextNumber + 1;
 			}
 
-			app.insertPizzaUpdateStorage(servicePizza,serviceStorage, newTask, nextNumber);
+			app.insertPizzaUpdateStorage(ingredientService,servicePizza,serviceStorage, newTask, nextNumber);
 
 			System.out.println("Пицца готова");
 		} catch (Exception e) {
